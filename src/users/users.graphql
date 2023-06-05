@@ -1,15 +1,34 @@
 type User {
-  # Example field (placeholder)
-  exampleField: Int
+  id: Int!
+  email: String!
+  firstname: String!
+  lastname: String!
+  isActive: Boolean!
+  Role: Role!
+}
+
+type Role {
+  id: Int!
+  name: String!
 }
 
 input CreateUserInput {
-  # Example field (placeholder)
-  exampleField: Int
+  email: String!
+  firstname: String!
+  lastname: String!
+  password: String!
+  confirmPassword: String!
 }
 
 input UpdateUserInput {
   id: Int!
+  email: String
+  firstname: String
+  lastname: String
+  password: String
+  confirmPassword: String
+  # isActive: Boolean
+  # roleId: Int
 }
 
 type Query {
