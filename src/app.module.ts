@@ -8,6 +8,8 @@ import { ApolloServerPluginLandingPageProductionDefault } from '@apollo/server/p
 import { join } from 'path';
 import configuration from './commons/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoaderService } from './commons/dataloader';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -43,6 +45,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [AppService, LoaderService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
