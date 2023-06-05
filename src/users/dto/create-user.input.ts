@@ -16,6 +16,9 @@ export class CreateUserInput extends User {
   password: string;
 
   @Field()
+  confirmPassword: string;
+
+  @Field()
   isBanned: boolean;
 
   @Field()
