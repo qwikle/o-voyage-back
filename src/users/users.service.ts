@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { User } from '../users/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { LoaderService } from 'src/commons/dataloader';
 
 @Injectable()
 export class UsersService {
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private loaderService: LoaderService,
+  ){}
+
+  createUser(createUserInput: CreateUserInput) {
+    const user = this.userRepository.create({...createUserInput});
+    console.log(user);
+    return user;
+    
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findAll(){
+    return this.userRepository.find(); 
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.loaderService.createDataLoader(User, 'id').load(id);
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserInput: UpdateUserInput) {
+    const user = await this.userRepository.findOneBy({id}); 
+    if(!user){
+      // todo replace null by throw graphql error 
+      return null;
+    }
+    return this.userRepository.merge(user, {...updateUserInput});
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.userRepository.delete(id);
   }
 }

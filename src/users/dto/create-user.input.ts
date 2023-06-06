@@ -17,7 +17,7 @@ export class CreateUserInput {
   @Field()
   confirmPassword: string;
 
-  @Field()
+  @Field({ defaultValue: false })
   isBanned: boolean;
 
   @Field()
