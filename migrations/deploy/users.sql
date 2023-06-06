@@ -15,6 +15,13 @@ CREATE TABLE "role" (
     "updated_at" TIMESTAMPTZ
 );
 
+INSERT INTO "role" (
+    "name"
+) VALUES (
+    'user'
+), (
+    'admin'
+);
 CREATE TABLE "user" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "firstname" TEXT NOT NULL CHECK (LENGTH("firstname") >= 2),
@@ -22,7 +29,7 @@ CREATE TABLE "user" (
     "email" "email_d" NOT NULL UNIQUE,
     "password" "password_d" NOT NULL,
     "is_banned" BOOLEAN NOT NULL DEFAULT FALSE,
-    "role_id" INTEGER NOT NULL REFERENCES "role" ("id"),
+    "role_id" INTEGER NOT NULL REFERENCES "role" ("id") DEFAULT 1,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
 );

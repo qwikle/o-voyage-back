@@ -7,14 +7,14 @@ import {
   AfterLoad,
 } from 'typeorm';
 import { HashContract, Hash } from 'src/commons/bcrypt';
-@Entity()
+@Entity('user')
 export class User {
   private readonly hash: HashContract;
   constructor() {
     this.hash = Hash.getInstance();
   }
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   email: string;
@@ -32,7 +32,7 @@ export class User {
   isBanned: boolean;
 
   @Column()
-  role_id: string;
+  roleId: string;
 
   private tempPassword: string;
   @AfterLoad()

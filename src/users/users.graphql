@@ -3,7 +3,7 @@ type User {
   email: String!
   firstname: String!
   lastname: String!
-  isActive: Boolean!
+  isBanned: Boolean!
   Role: Role!
 }
 
@@ -27,7 +27,7 @@ input UpdateUserInput {
   lastname: String
   password: String
   confirmPassword: String
-  # isActive: Boolean
+  # isBanned: Boolean
   # roleId: Int
 }
 

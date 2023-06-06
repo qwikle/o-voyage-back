@@ -1,35 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { User } from './user.entity';
+import { User } from '../users/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { LoaderService } from 'src/commons/dataloader';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private loaderService: LoaderService,
+  ){}
+
   createUser(createUserInput: CreateUserInput) {
-    const user = new User();
-    user.email = createUserInput.email;
-    user.firstname = createUserInput.firstname;
-    user.lastname = createUserInput.lastname;
-    user.password = createUserInput.password;
-    user.confirmPassword = createUserInput.confirmPassword;
-    user.isBanned = createUserInput.isBanned;
-    user.role_id = createUserInput.role_id;
-    return user.save();
+    const user = this.userRepository.create({...createUserInput});
+    console.log(user);
+    return user;
+    
   }
 
-  async findAllUsers(): Promise<User[]> {
-    return await User.find(); 
+  findAll(){
+    return this.userRepository.find(); 
   }
 
-  async findOne(id: number) {
-    return await User.findOne(id);
+  findOne(id: number) {
+    return this.loaderService.createDataLoader(User, 'id').load(id);
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return User.update(id, updateUserInput);
+  async update(id: number, updateUserInput: UpdateUserInput) {
+    const user = await this.userRepository.findOneBy({id}); 
+    if(!user){
+      // todo replace null by throw graphql error 
+      return null;
+    }
+    return this.userRepository.merge(user, {...updateUserInput});
   }
 
   remove(id: number) {
-    return User.delete(id);
+    return this.userRepository.delete(id);
   }
 }

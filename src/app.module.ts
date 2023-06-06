@@ -8,8 +8,8 @@ import { ApolloServerPluginLandingPageProductionDefault } from '@apollo/server/p
 import { join } from 'path';
 import configuration from './commons/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoaderService } from './commons/dataloader';
 import { DataSource } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -42,10 +42,11 @@ import { DataSource } from 'typeorm';
       database: configuration().pg.database,
       autoLoadEntities: true,
       synchronize: false,
+      namingStrategy: new SnakeNamingStrategy(), 
     }),
   ],
   controllers: [],
-  providers: [AppService, LoaderService],
+  providers: [AppService],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
