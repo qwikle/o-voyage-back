@@ -1,11 +1,12 @@
 scalar Password
+scalar Email
 type Auth {
   user: User!
   token: String!
 }
 
 input SignUpInput {
-  email: String!
+  email: Email!
   password: Password!
   confirmPassword: String!
   firstName: String!
@@ -13,7 +14,7 @@ input SignUpInput {
 }
 
 input SignInInput {
-  email: String!
+  email: Email!
   password: Password!
 }
 
