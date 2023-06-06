@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+  createUser(createUserInput: CreateUserInput) {
+    const user = new User();
+    user.email = createUserInput.email;
+    user.firstname = createUserInput.firstname;
+    user.lastname = createUserInput.lastname;
+    user.password = createUserInput.password;
+    user.confirmPassword = createUserInput.confirmPassword;
+    user.isBanned = createUserInput.isBanned;
+    user.role_id = createUserInput.role_id;
+    return user.save();
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAllUsers(): Promise<User[]> {
+    return await User.find(); 
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    return await User.findOne(id);
   }
 
   update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+    return User.update(id, updateUserInput);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return User.delete(id);
   }
 }
