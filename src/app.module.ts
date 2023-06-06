@@ -10,6 +10,7 @@ import configuration from './commons/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       synchronize: false,
       namingStrategy: new SnakeNamingStrategy(),
     }),
+    AuthModule,
   ],
   controllers: [],
   providers: [AppService],
