@@ -1,0 +1,61 @@
+name: Automatisation des tâches
+
+on:
+  issues:
+    types:
+      - assigned
+      - reopened
+      - closed
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  move_to_in_progress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Déplacer vers "In Progress"
+        if: github.event.issue.assignee != null
+        uses: peter-evans/issue-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            **Tâche assignée**
+            Cette tâche a été assignée et sera déplacée dans la colonne "In Progress".
+
+  move_to_need_review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Déplacer vers "Need Review"
+        if: github.event.pull_request != null && github.event.issue != null
+        uses: peter-evans/issue-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            **Pull Request créée**
+            Cette tâche est attachée à une branche et une Pull Request a été créée. Elle sera déplacée dans la colonne "Need Review".
+
+  move_to_done:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Déplacer vers "Done"
+        if: github.event.issue != null && github.event.issue.state == 'closed'
+        uses: peter-evans/issue-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            **Tâche fermée**
+            Cette tâche a été marquée comme fermée et sera déplacée dans la colonne "Done".
+
+  move_to_need_to_fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Déplacer vers "Need to Fix"
+        if: github.event.issue != null && github.event.issue.state == 'reopened'
+        uses: peter-evans/issue-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            **Tâche réouverte**
+            Cette tâche a été réouverte et sera déplacée dans la colonne "Need to Fix".
