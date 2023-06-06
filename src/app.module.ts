@@ -10,6 +10,7 @@ import configuration from './commons/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,12 +24,16 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       driver: ApolloDriver,
       useFactory: async () => ({
         playground: false,
+        status400ForVariableCoercionErrors: true,
         typePaths: ['./**/*.graphql'],
         definitions: {
           path: join(process.cwd(), 'src/graphql.ts'),
           outputAs: 'class',
           emitTypenameField: true,
           defaultScalarType: 'unknown',
+          customScalarTypeMapping: {
+            Password: 'string',
+          },
         },
         plugins: [ApolloServerPluginLandingPageProductionDefault()],
       }),
@@ -44,6 +49,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       synchronize: false,
       namingStrategy: new SnakeNamingStrategy(),
     }),
+    AuthModule,
   ],
   controllers: [],
   providers: [AppService],
