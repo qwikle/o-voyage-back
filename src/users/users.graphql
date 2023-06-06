@@ -1,6 +1,8 @@
+scalar Email
+
 type User {
   id: Int!
-  email: String!
+  email: Email!
   firstname: String!
   lastname: String!
   isBanned: Boolean!
@@ -13,7 +15,7 @@ type Role {
 }
 
 input CreateUserInput {
-  email: String!
+  email: Email!
   firstname: String!
   lastname: String!
   password: String!
@@ -22,7 +24,7 @@ input CreateUserInput {
 
 input UpdateUserInput {
   id: Int!
-  email: String
+  email: Email
   firstname: String
   lastname: String
   password: String
