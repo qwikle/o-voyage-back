@@ -7,28 +7,13 @@ import { UpdateAuthInput } from './dto/update-auth.input';
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Mutation('createAuth')
-  create(@Args('createAuthInput') createAuthInput: CreateAuthInput) {
+  @Mutation('signUp')
+  create(@Args('signUp') createAuthInput: CreateAuthInput) {
     return this.authService.create(createAuthInput);
   }
 
-  @Query('auth')
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Query('auth')
-  findOne(@Args('id') id: number) {
-    return this.authService.findOne(id);
-  }
-
-  @Mutation('updateAuth')
-  update(@Args('updateAuthInput') updateAuthInput: UpdateAuthInput) {
+  @Mutation('signIn')
+  update(@Args('signIn') updateAuthInput: UpdateAuthInput) {
     return this.authService.update(updateAuthInput.id, updateAuthInput);
-  }
-
-  @Mutation('removeAuth')
-  remove(@Args('id') id: number) {
-    return this.authService.remove(id);
   }
 }

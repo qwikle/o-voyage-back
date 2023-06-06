@@ -1,24 +1,23 @@
+scalar Password
 type Auth {
-  # Example field (placeholder)
-  exampleField: Int
+  user: User!
+  token: String!
 }
 
-input CreateAuthInput {
-  # Example field (placeholder)
-  exampleField: Int
+input SignUpInput {
+  email: String!
+  password: Password!
+  confirmPassword: String!
+  firstName: String!
+  lastName: String!
 }
 
-input UpdateAuthInput {
-  id: Int!
-}
-
-type Query {
-  auth: [Auth]!
-  auth(id: Int!): Auth
+input SignInInput {
+  email: String!
+  password: Password!
 }
 
 type Mutation {
-  createAuth(createAuthInput: CreateAuthInput!): Auth!
-  updateAuth(updateAuthInput: UpdateAuthInput!): Auth!
-  removeAuth(id: Int!): Auth
+  signUp(signUpInput: SignUpInput!): Auth!
+  signIn(signInInput: SignInInput!): Auth!
 }
