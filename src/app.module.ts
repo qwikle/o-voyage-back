@@ -23,12 +23,16 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       driver: ApolloDriver,
       useFactory: async () => ({
         playground: false,
+        status400ForVariableCoercionErrors: true,
         typePaths: ['./**/*.graphql'],
         definitions: {
           path: join(process.cwd(), 'src/graphql.ts'),
           outputAs: 'class',
           emitTypenameField: true,
           defaultScalarType: 'unknown',
+          customScalarTypeMapping: {
+            Password: 'string',
+          },
         },
         plugins: [ApolloServerPluginLandingPageProductionDefault()],
       }),
