@@ -42,7 +42,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       database: configuration().pg.database,
       autoLoadEntities: true,
       synchronize: false,
-      namingStrategy: new SnakeNamingStrategy(), 
+      namingStrategy: new SnakeNamingStrategy(),
     }),
   ],
   controllers: [],

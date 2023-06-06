@@ -12,17 +12,16 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private loaderService: LoaderService,
-  ){}
+  ) {}
 
-  createUser(createUserInput: CreateUserInput) {
-    const user = this.userRepository.create({...createUserInput});
-    console.log(user);
+  async createUser(createUserInput: CreateUserInput) {
+    const user = this.userRepository.create({ ...createUserInput });
+    await this.userRepository.save(user);
     return user;
-    
   }
 
-  findAll(){
-    return this.userRepository.find(); 
+  findAll() {
+    return this.userRepository.find();
   }
 
   findOne(id: number) {
@@ -30,12 +29,12 @@ export class UsersService {
   }
 
   async update(id: number, updateUserInput: UpdateUserInput) {
-    const user = await this.userRepository.findOneBy({id}); 
-    if(!user){
-      // todo replace null by throw graphql error 
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      // todo replace null by throw graphql error
       return null;
     }
-    return this.userRepository.merge(user, {...updateUserInput});
+    return this.userRepository.merge(user, { ...updateUserInput });
   }
 
   remove(id: number) {
