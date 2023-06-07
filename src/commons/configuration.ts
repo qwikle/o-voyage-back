@@ -1,5 +1,6 @@
 export default () => ({
-  key: process.env.KEY,
+  jwtSecret: process.env.JWT_SECRET,
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
   port: parseInt(process.env.PORT, 10) || 3000,
   pg: {
     type: 'postgres',
