@@ -20,7 +20,7 @@ export class AuthResolver {
     const { password, email } = SignInInput;
     const user = await this.authService.findByEmail(email);
     if (user) {
-      const isMatch = Hash.getInstance().comparePassword(
+      const isMatch = await Hash.getInstance().comparePassword(
         password,
         user.password,
       );
@@ -32,6 +32,10 @@ export class AuthResolver {
         };
       }
     }
-    throw new GraphQLError('Invalid credentials');
+    throw new GraphQLError('Invalid credentials', {
+      extensions: {
+        code: 'UNAUTHENTICATED',
+      },
+    });
   }
 }
