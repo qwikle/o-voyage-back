@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -48,6 +49,11 @@ import { AuthModule } from './auth/auth.module';
       autoLoadEntities: true,
       synchronize: false,
       namingStrategy: new SnakeNamingStrategy(),
+    }),
+    JwtModule.register({
+      global: true,
+      secret: configuration().key,
+      signOptions: { expiresIn: '15m' },
     }),
     AuthModule,
   ],

@@ -11,12 +11,12 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation('signUp')
-  signUp(@Args('signUp') createAuthInput: SignUpInput) {
+  signUp(@Args('signUpInput') createAuthInput: SignUpInput) {
     return this.authService.createUser(createAuthInput);
   }
 
   @Mutation('signIn')
-  async signIn(@Args('signIn') SignInInput: SignInInput) {
+  async signIn(@Args('signInInput') SignInInput: SignInInput) {
     const { password, email } = SignInInput;
     const user = await this.authService.findByEmail(email);
     if (user) {

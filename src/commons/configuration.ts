@@ -1,4 +1,5 @@
 export default () => ({
+  key: process.env.KEY,
   port: parseInt(process.env.PORT, 10) || 3000,
   pg: {
     type: 'postgres',
