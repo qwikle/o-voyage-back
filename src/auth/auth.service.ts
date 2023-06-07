@@ -3,11 +3,13 @@ import { SignUpInput } from './dto/sign-up.Input';
 import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private jwtService: JwtService,
   ) {}
 
   createUser(signUpInput: SignUpInput) {
@@ -19,9 +21,9 @@ export class AuthService {
     return `This action returns all auth`;
   }
 
-  // TODO: Implement this method
+  // TODO: add role to token
   generateToken(user: User) {
-    return `This action returns a  auth`;
+    return this.jwtService.signAsync({ id: user.id });
   }
 
   findByEmail(email: string) {
