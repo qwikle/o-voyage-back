@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthInput } from './dto/create-auth.input';
+import { SignUpInput } from './dto/signUpInput';
+import { User } from 'src/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
+
 @Injectable()
 export class AuthService {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
 
-  create(createAuthInput: CreateAuthInput) {
-    return 'This action adds a new auth';
+  createUser(signUpInput: SignUpInput) {
+    const user = this.userRepository.create({ ...signUpInput });
+    return this.userRepository.save(user);
   }
 
   findAll() {
