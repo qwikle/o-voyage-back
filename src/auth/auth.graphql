@@ -2,7 +2,12 @@ scalar Password
 scalar Email
 type Auth {
   user: User!
-  token: String!
+  token: Token!
+}
+
+type Token {
+  accessToken: String!
+  refreshToken: String!
 }
 
 input SignUpInput {

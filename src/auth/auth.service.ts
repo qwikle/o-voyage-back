@@ -4,6 +4,7 @@ import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import configuration from 'src/commons/configuration';
 
 @Injectable()
 export class AuthService {
@@ -22,8 +23,19 @@ export class AuthService {
   }
 
   // TODO: add role to token
-  generateToken(user: User) {
-    return this.jwtService.signAsync({ id: user.id });
+  async generateToken(user: User, ip: string) {
+    const accessToken = await this.jwtService.signAsync({ id: user.id, ip });
+    const refreshToken = await this.jwtService.signAsync(
+      { id: user.id, ip },
+      {
+        secret: configuration().jwtRefreshSecret,
+        expiresIn: '7d',
+      },
+    );
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
   findByEmail(email: string) {
