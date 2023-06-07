@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { SignUpInput } from './dto/sign-up.Input';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SignInInput } from './dto/sign-in.input';
 import { Hash } from 'src/commons/bcrypt';
 import { GraphQLError } from 'graphql';
