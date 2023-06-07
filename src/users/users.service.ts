@@ -29,7 +29,10 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return this.userRepository.findOneBy({ id, role: true });
+    return this.userRepository.findOne({
+      relations: { role: true },
+      where: { id },
+    });
   }
 
   async update(id: number, updateUserInput: UpdateUserInput) {
