@@ -1,25 +1,41 @@
 scalar Password
 scalar Email
+
+" The Auth object containing the user and the token"
 type Auth {
+  "The user object"
   user: User!
+  "The token object"
   token: Token!
 }
 
+" A Token object"
 type Token {
+  "The jwt access token"
   accessToken: String!
+  "The jwt refresh token"
   refreshToken: String!
 }
 
+" Mutation to sign up a user"
 input SignUpInput {
+  "The user email"
   email: Email!
+  "The user password"
   password: Password!
+  "The user password confirmation"
   confirmPassword: String!
+  "The user first name"
   firstName: String!
+  "The user last name"
   lastName: String!
 }
 
+" Mutation to sign in a user"
 input SignInInput {
+  "The user email"
   email: Email!
+  "The user password"
   password: String!
 }
 
