@@ -12,8 +12,27 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation('signUp')
-  signUp(@Args('signUpInput') createAuthInput: SignUpInput) {
-    return this.authService.createUser(createAuthInput);
+  async signUp(@Args('signUpInput') createAuthInput: SignUpInput, @Context() ctx: OContext) {
+    const user = await this.authService.findByEmail(createAuthInput.email);
+    if (user) {
+      throw new GraphQLError('This email is allready used', {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+          argumentName: 'email'
+        }
+      })
+    }
+    if(createAuthInput.password !== createAuthInput.confirmPassword){
+      throw new GraphQLError('Password and confirm password are not the same', {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+          argumentName: 'confirmPassword'
+        }
+      })
+    }
+    const createdUser = await this.authService.createUser(createAuthInput);
+    const token = await this.authService.generateToken(createdUser, ctx.req.ip);
+    return {user: createdUser, token}
   }
 
   @Mutation('signIn')

@@ -26,9 +26,9 @@ input SignUpInput {
   "The user password confirmation"
   confirmPassword: String!
   "The user first name"
-  firstName: String!
+  firstname: String!
   "The user last name"
-  lastName: String!
+  lastname: String!
 }
 
 " Mutation to sign in a user"

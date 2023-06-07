@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   createUser(signUpInput: SignUpInput) {
-    const user = this.userRepository.create({ ...signUpInput });
+    const user = this.userRepository.create(signUpInput);
     return this.userRepository.save(user);
   }
 
