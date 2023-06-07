@@ -1,10 +1,9 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { SignUpInput } from './dto/signUpInput';
-import { SignInInput } from './dto/update-auth.input';
+import { SignUpInput } from './dto/sign-up.Input';
+import { SignInInput } from './dto/sign-in.input';
 import { Hash } from 'src/commons/bcrypt';
 import { GraphQLError } from 'graphql';
-
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -12,7 +11,7 @@ export class AuthResolver {
 
   @Mutation('signUp')
   signUp(@Args('signUp') createAuthInput: SignUpInput) {
-    return this.authService.create(createAuthInput);
+    return this.authService.createUser(createAuthInput);
   }
 
   @Mutation('signIn')
