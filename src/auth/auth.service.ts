@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { SignUpInput } from './dto/signUpInput';
-import { User } from 'src/graphql';
+import { SignUpInput } from './dto/sign-up.Input';
+import { User } from '../../src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
 
   createUser(signUpInput: SignUpInput) {
     const user = this.userRepository.create({ ...signUpInput });
