@@ -1,4 +1,4 @@
-import { CreateAuthInput } from './create-auth.input';
+import { CreateAuthInput } from './signUpInput';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class UpdateAuthInput extends PartialType(CreateAuthInput) {

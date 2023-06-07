@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { CreateAuthInput } from './dto/create-auth.input';
+import { CreateAuthInput } from './dto/signUpInput';
 import { UpdateAuthInput } from './dto/update-auth.input';
 
 @Resolver('Auth')
