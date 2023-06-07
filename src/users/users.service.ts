@@ -21,11 +21,15 @@ export class UsersService {
   }
 
   findAll() {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      relations: {
+        role: true,
+      },
+    });
   }
 
   findOne(id: number) {
-    return this.loaderService.createDataLoader(User, 'id').load(id);
+    return this.userRepository.findOneBy({ id, role: true });
   }
 
   async update(id: number, updateUserInput: UpdateUserInput) {
