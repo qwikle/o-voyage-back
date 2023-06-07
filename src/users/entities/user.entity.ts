@@ -4,9 +4,11 @@ import {
   Column,
   BeforeInsert,
   BeforeUpdate,
+  ManyToOne,
   AfterLoad,
 } from 'typeorm';
 import { HashContract, Hash } from 'src/commons/bcrypt';
+import { Role } from './role.entity';
 @Entity('user')
 export class User {
   private readonly hash: HashContract;
@@ -31,8 +33,8 @@ export class User {
   @Column({ default: false })
   isBanned: boolean;
 
-  @Column()
-  roleId: string;
+  @ManyToOne(() => Role, (role) => role.users)
+  role: Role;
 
   private tempPassword: string;
   @AfterLoad()
