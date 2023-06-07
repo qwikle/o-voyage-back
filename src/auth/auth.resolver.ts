@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { SignUpInput } from './dto/sign-up.Input';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SignInInput } from './dto/sign-in.input';
 import { Hash } from 'src/commons/bcrypt';
 import { GraphQLError } from 'graphql';
@@ -10,12 +11,12 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation('signUp')
-  signUp(@Args('signUp') createAuthInput: SignUpInput) {
+  signUp(@Args('signUpInput') createAuthInput: SignUpInput) {
     return this.authService.createUser(createAuthInput);
   }
 
   @Mutation('signIn')
-  async signIn(@Args('signIn') SignInInput: SignInInput) {
+  async signIn(@Args('signInInput') SignInInput: SignInInput) {
     const { password, email } = SignInInput;
     const user = await this.authService.findByEmail(email);
     if (user) {
