@@ -22,9 +22,9 @@ export class AuthService {
     return `This action returns all auth`;
   }
 
-  // TODO: add role to token
+
   async generateToken(user: User, ip: string) {
-    const accessToken = await this.jwtService.signAsync({ id: user.id, ip });
+    const accessToken = await this.jwtService.signAsync({ id: user.id, ip, role: user.roleId });
     const refreshToken = await this.jwtService.signAsync(
       { id: user.id, ip },
       {
