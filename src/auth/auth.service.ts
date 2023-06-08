@@ -22,9 +22,9 @@ export class AuthService {
     return `This action returns all auth`;
   }
 
-  // TODO: add role to token
+
   async generateToken(user: User, ip: string) {
-    const accessToken = await this.jwtService.signAsync({ id: user.id, ip });
+    const accessToken = await this.jwtService.signAsync({ id: user.id, ip, role: user.role.id });
     const refreshToken = await this.jwtService.signAsync(
       { id: user.id, ip },
       {
@@ -39,6 +39,6 @@ export class AuthService {
   }
 
   findByEmail(email: string) {
-    return this.userRepository.findOneBy({ email });
+    return this.userRepository.findOne({ where: {email}, relations: {role: true} });
   }
 }
