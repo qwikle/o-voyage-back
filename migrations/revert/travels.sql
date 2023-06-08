@@ -2,6 +2,7 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+DROP TABLE "travel";
+DROP DOMAIN "length_d";
 
 COMMIT;
