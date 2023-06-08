@@ -15,7 +15,7 @@ export class UsersService {
   ) {}
 
   async createUser(createUserInput: CreateUserInput) {
-    const user = this.userRepository.create({ ...createUserInput });
+    const user = this.userRepository.create( createUserInput );
     await this.userRepository.save(user);
     return user;
   }
@@ -46,5 +46,9 @@ export class UsersService {
 
   remove(id: number) {
     return this.userRepository.delete(id);
+  }
+
+  findByEmail(email: string) {
+    return this.userRepository.findOneBy({ email });
   }
 }
