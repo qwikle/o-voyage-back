@@ -24,7 +24,7 @@ export class AuthService {
 
 
   async generateToken(user: User, ip: string) {
-    const accessToken = await this.jwtService.signAsync({ id: user.id, ip, role: user.role.id });
+    const accessToken = await this.jwtService.signAsync({ id: user.id, ip, role: user.roleId });
     const refreshToken = await this.jwtService.signAsync(
       { id: user.id, ip },
       {
@@ -39,6 +39,6 @@ export class AuthService {
   }
 
   findByEmail(email: string) {
-    return this.userRepository.findOne({ where: {email}, relations: {role: true} });
+    return this.userRepository.findOneBy({ email });
   }
 }

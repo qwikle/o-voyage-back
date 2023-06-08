@@ -7,6 +7,7 @@ import { Hash } from 'src/commons/bcrypt';
 import { GraphQLError } from 'graphql';
 import { OContext } from 'src/commons/context';
 
+// TODO set roles in new folder
 @Resolver('Auth')
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
