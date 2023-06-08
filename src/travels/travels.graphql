@@ -1,0 +1,24 @@
+type Travel {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input CreateTravelInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateTravelInput {
+  id: Int!
+}
+
+type Query {
+  travels: [Travel]!
+  travel(id: Int!): Travel
+}
+
+type Mutation {
+  createTravel(createTravelInput: CreateTravelInput!): Travel!
+  updateTravel(updateTravelInput: UpdateTravelInput!): Travel!
+  removeTravel(id: Int!): Travel
+}

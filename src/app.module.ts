@@ -12,6 +12,7 @@ import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { TravelsModule } from './travels/travels.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '15m' },
     }),
     AuthModule,
+    TravelsModule,
   ],
   controllers: [],
   providers: [AppService],
