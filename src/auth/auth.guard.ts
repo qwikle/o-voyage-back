@@ -8,10 +8,15 @@ export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
-    const jwtToken = req.headers.authorization.split(' ')[1];
+    if (!req.headers['authorization']) {
+      return false;
+    }
+    const jwtToken = req.headers['authorization'].split(' ')[1];
     const user = this.jwtService.verify(jwtToken);
     if (user) {
-      req.user = user;
+      if (req.ip !== user.ip) {
+        return false;
+      }
       return true;
     }
     return false;

@@ -22,9 +22,12 @@ export class AuthService {
     return `This action returns all auth`;
   }
 
-
   async generateToken(user: User, ip: string) {
-    const accessToken = await this.jwtService.signAsync({ id: user.id, ip, role: user.roleId });
+    const accessToken = await this.jwtService.signAsync({
+      id: user.id,
+      ip,
+      role: user.roleId,
+    });
     const refreshToken = await this.jwtService.signAsync(
       { id: user.id, ip },
       {
@@ -33,7 +36,7 @@ export class AuthService {
       },
     );
     return {
-      accessToken,
+      accessToken: 'bearer ' + accessToken,
       refreshToken,
     };
   }
