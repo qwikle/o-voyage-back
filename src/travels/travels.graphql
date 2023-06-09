@@ -1,8 +1,8 @@
 type Travel {
   "The id of the travel"
   id: Int!
-  "The name of the travel"
-  name: String!
+  "The title of the travel"
+  title: String!
   "The from of the travel"
   from: String!
   "The to of the travel"
