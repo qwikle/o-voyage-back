@@ -1,6 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'src/commons/context';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -12,11 +13,12 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     const jwtToken = req.headers['authorization'].split(' ')[1];
-    const user = this.jwtService.verify(jwtToken);
-    if (user) {
-      if (req.ip !== user.ip) {
+    const auth: JwtPayload = this.jwtService.verify(jwtToken);
+    if (auth) {
+      if (req.ip !== auth.ip) {
         return false;
       }
+      req.auth = auth;
       return true;
     }
     return false;

@@ -8,10 +8,10 @@ type Travel {
   "The to of the travel"
   to: String!
   "The departure_date of the travel"
-  departure_date: String!  # Date!
+  departure_date: String! # Date!
   "The arrival_date of the travel"
   arrival_date: String! # Date!
-  "The budget of the travel"  
+  "The budget of the travel"
   budget: Int!
   "The number_attendees of the travel"
   number_attendees: Int!
@@ -20,13 +20,13 @@ type Travel {
 }
 
 input CreateTravelInput {
-  # name: String!
-  # from: String!
-  # to: String!
-  # departure_date: Date!
-  # arrival_date: Date!
-  # budget: Int!
-  # attendees: Int!
+  name: String!
+  from: String!
+  to: String!
+  departure_date: String!
+  arrival_date: String!
+  budget: Int!
+  attendees: Int!
 }
 
 input UpdateTravelInput {
