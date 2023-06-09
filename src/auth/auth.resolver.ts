@@ -71,7 +71,7 @@ export class AuthResolver {
   async deleteAccount(@Context() ctx: OContext) {
     const { auth } = ctx.req;
     const user = await this.authService.findById(auth.id);
-    if(!user){
+    if (!user) {
       throw new GraphQLError('User not found', {
         extensions: {
           code: 'NOT_FOUND',
