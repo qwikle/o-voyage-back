@@ -44,4 +44,13 @@ export class AuthService {
   findByEmail(email: string) {
     return this.userRepository.findOneBy({ email });
   }
+
+  findById(id: number) {
+    return this.userRepository.findOneBy({ id });
+  }
+
+  async deleteAccount(user: User) {
+    await this.userRepository.delete(user.id);
+    return true;
+  }
 }
