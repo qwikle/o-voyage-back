@@ -12,9 +12,9 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     const jwtToken = req.headers['authorization'].split(' ')[1];
-    const user = this.jwtService.verify(jwtToken);
-    if (user) {
-      if (req.ip !== user.ip) {
+    const auth = this.jwtService.verify(jwtToken);
+    if (auth) {
+      if (req.ip !== auth.ip) {
         return false;
       }
       return true;
