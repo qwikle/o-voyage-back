@@ -1,11 +1,32 @@
 type Travel {
-  # Example field (placeholder)
-  exampleField: Int
+  "The id of the travel"
+  id: Int!
+  "The title of the travel"
+  title: String!
+  "The from of the travel"
+  from: String!
+  "The to of the travel"
+  to: String!
+  "The departure_date of the travel"
+  departure_date: String!  # Date!
+  "The arrival_date of the travel"
+  arrival_date: String! # Date!
+  "The budget of the travel"  
+  budget: Int!
+  "The number_attendees of the travel"
+  number_attendees: Int!
+  "relation user - travel"
+  user_id: Int!
 }
 
 input CreateTravelInput {
-  # Example field (placeholder)
-  exampleField: Int
+  # name: String!
+  # from: String!
+  # to: String!
+  # departure_date: Date!
+  # arrival_date: Date!
+  # budget: Int!
+  # attendees: Int!
 }
 
 input UpdateTravelInput {
