@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTravelInput } from './dto/create-travel.input';
 import { UpdateTravelInput } from './dto/update-travel.input';
-import { Travel } from './entities/travel.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Travel } from './entities/travel.entity';
 import { Repository } from 'typeorm';
 @Injectable()
 export class TravelsService {
   constructor(
     @InjectRepository(Travel)
-    private travelsRepository: Repository<Travel>,
+    private travelRepository: Repository<Travel>,
   ) {}
 
-  create(createTravelInput: CreateTravelInput) {
-    return 'This action adds a new travel';
+  async create(createTravelInput: CreateTravelInput) {
+    const travel = this.travelRepository.create(createTravelInput);
+    return this.travelRepository.save(travel);
   }
 
   findAll() {
@@ -28,6 +29,6 @@ export class TravelsService {
   }
 
   remove(id: number) {
-    return this.travelsRepository.delete(id);
+    return this.travelRepository.delete(id);
   }
 }

@@ -25,5 +25,4 @@ export class CreateTravelInput {
 
     @Field()
     organizerId: number;
-
 }
