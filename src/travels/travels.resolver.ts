@@ -1,7 +1,10 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { TravelsService } from './travels.service';
 import { CreateTravelInput } from './dto/create-travel.input';
 import { UpdateTravelInput } from './dto/update-travel.input';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { OContext } from 'src/commons/context';
 
 @Resolver('Travel')
 export class TravelsResolver {
@@ -27,8 +30,20 @@ export class TravelsResolver {
     return this.travelsService.update(updateTravelInput.id, updateTravelInput);
   }
 
+  // TODO refactor into another guard
+  @UseGuards(AuthGuard)
   @Mutation('removeTravel')
-  remove(@Args('id') id: number) {
+  async remove(@Args('id') id: number, @Context() { req }: OContext) {
+    const travel = await this.travelsService.findOne(id);
+    if (!travel) {
+      throw new Error('Travel not found');
+    }
+    const { auth } = req;
+    if (travel.organizerId !== auth.id) {
+      if (auth.role !== 2) {
+        throw new Error('You are not the organizer of this travel');
+      }
+    }
     return this.travelsService.remove(id);
   }
 }
