@@ -7,14 +7,13 @@ import {
   ManyToOne,
   AfterLoad,
 } from 'typeorm';
-import { HashContract, Hash } from 'src/commons/bcrypt';
+import { Hash } from 'src/commons/bcrypt';
 import { Role } from './role.entity';
+import { Inject, Injectable } from '@nestjs/common';
+
 @Entity('user')
 export class User {
-  private readonly hash: HashContract;
-  constructor() {
-    this.hash = Hash.getInstance();
-  }
+  static hash = new Hash();
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -49,7 +48,7 @@ export class User {
   @BeforeUpdate()
   async hashPassword(): Promise<void> {
     if (this.tempPassword !== this.password) {
-      this.password = await this.hash.hashPassword(this.password);
+      this.password = await User.hash.hashPassword(this.password);
     }
   }
 

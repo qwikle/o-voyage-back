@@ -12,7 +12,10 @@ import { AuthGuard } from './auth.guard';
 // TODO set roles in new folder
 @Resolver('Auth')
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly hash: Hash,
+  ) {}
 
   @Mutation('signUp')
   async signUp(
@@ -49,10 +52,7 @@ export class AuthResolver {
     const { password, email } = SignInInput;
     const user = await this.authService.findByEmail(email);
     if (user) {
-      const isMatch = await Hash.getInstance().comparePassword(
-        password,
-        user.password,
-      );
+      const isMatch = await this.hash.comparePassword(password, user.password);
       if (isMatch) {
         const { ip } = ctx.req;
         const token = await this.authService.generateToken(user, ip);
