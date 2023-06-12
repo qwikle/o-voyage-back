@@ -10,8 +10,16 @@ import { OContext } from 'src/commons/context';
 export class TravelsResolver {
   constructor(private readonly travelsService: TravelsService) {}
 
+  @UseGuards(AuthGuard)
   @Mutation('createTravel')
-  create(@Args('createTravelInput') createTravelInput: CreateTravelInput) {
+  async create(@Args('createTravelInput') createTravelInput: CreateTravelInput, @Context() {req}: OContext) {
+    const travel = await this.travelsService.findOne(createTravelInput.organizerId);
+    const { auth } = req;
+    if(auth.id !== travel.organizerId){
+      if(auth.role !== 2){
+        throw new Error('You are not the organizer of this travel');
+      }
+    }
     return this.travelsService.create(createTravelInput);
   }
 
