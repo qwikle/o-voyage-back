@@ -24,10 +24,11 @@ input CreateTravelInput {
   title: String!
   from: String!
   to: String!
-  departure_date: Date!
-  arrival_date: Date!
+  departureDate: Date!
+  arrivalDate: Date!
   budget: Int!
-  attendees: Int!
+  numberOfAttendees: Int!
+  organizerId: Int!
 }
 
 input UpdateTravelInput {
