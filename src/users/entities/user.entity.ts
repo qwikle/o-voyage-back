@@ -35,7 +35,7 @@ export class User {
 
   @Column()
   roleId: number;
-  
+
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
 
@@ -51,5 +51,11 @@ export class User {
     if (this.tempPassword !== this.password) {
       this.password = await this.hash.hashPassword(this.password);
     }
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async toLowerCase(): Promise<void> {
+    this.email = this.email.toLowerCase();
   }
 }

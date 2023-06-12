@@ -1,3 +1,4 @@
+scalar Date
 type Travel {
   "The id of the travel"
   id: Int!
@@ -31,13 +32,14 @@ type Attendee {
 }
 
 input CreateTravelInput {
-  name: String!
+  title: String!
   from: String!
   to: String!
-  departure_date: String!
-  arrival_date: String!
+  departureDate: Date!
+  arrivalDate: Date!
   budget: Int!
-  attendees: Int!
+  numberOfAttendees: Int!
+  organizerId: Int!
 }
 
 input UpdateTravelInput {
