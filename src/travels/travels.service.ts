@@ -1,11 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTravelInput } from './dto/create-travel.input';
 import { UpdateTravelInput } from './dto/update-travel.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Travel } from './entities/travel.entity';
+import { Repository } from 'typeorm';
+import { LoaderService } from 'src/commons/dataloader';
 
 @Injectable()
+
 export class TravelsService {
-  create(createTravelInput: CreateTravelInput) {
-    return 'This action adds a new travel';
+constructor(
+  @InjectRepository(Travel)
+  private travelRepository: Repository<Travel>
+){}
+
+  async create(createTravelInput: CreateTravelInput) {
+    const travel = this.travelRepository.create(createTravelInput);
+    return this.travelRepository.save(travel);
   }
 
   findAll() {
