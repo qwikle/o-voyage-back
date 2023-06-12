@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import {
   createCipheriv,
@@ -7,18 +8,14 @@ import {
   Cipher,
 } from 'crypto';
 
+@Injectable()
 export class Hash implements HashContract {
   private salts: number;
   private iv: Buffer;
   private cipher: Cipher;
   private key: string;
   static hash: HashContract;
-  static getInstance(): HashContract {
-    if (!Hash.hash) {
-      Hash.hash = new Hash();
-    }
-    return Hash.hash;
-  }
+
   constructor() {
     this.init();
   }
