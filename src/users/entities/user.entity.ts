@@ -52,4 +52,10 @@ export class User {
       this.password = await this.hash.hashPassword(this.password);
     }
   }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async toLowerCase(): Promise<void> {
+    this.email = this.email.toLowerCase();
+  }
 }
