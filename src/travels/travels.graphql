@@ -8,16 +8,27 @@ type Travel {
   from: String!
   "The to of the travel"
   to: String!
-  "The departure_date of the travel"
-  departure_date: Date! # Date!
-  "The arrival_date of the travel"
-  arrival_date: Date! # Date!
+  "The departureDate of the travel"
+  departureDate: String! # Date!
+  "The arrivalDate of the travel"
+  arrivalDate: String! # Date!
   "The budget of the travel"
   budget: Int!
-  "The number_attendees of the travel"
-  number_attendees: Int!
+  "The numberOfAttendees of the travel"
+  numberOfAttendees: Int!
   "relation user - travel"
-  user_id: Int!
+  organizerId: Int!
+  "organizer of the travel"
+  organizer: Attendee!
+  "Attendees of the travel"
+  attendees: [Attendee!]!
+}
+
+type Attendee {
+  id: Int!
+  firstname: String!
+  lastname: String!
+  email: String!
 }
 
 input CreateTravelInput {
