@@ -35,7 +35,7 @@ export class User {
 
   @Column()
   roleId: number;
-  
+
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
 
