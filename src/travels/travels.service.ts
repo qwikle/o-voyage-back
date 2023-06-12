@@ -24,8 +24,12 @@ export class TravelsService {
     return this.travelRepository.findOneBy({ id });
   }
 
-  update(id: number, updateTravelInput: UpdateTravelInput) {
-    return `This action updates a #${id} travel`;
+  async update(id: number, updateTravelInput: UpdateTravelInput) {
+    const travel = await this.travelRepository.findOneBy({id})
+    if(!travel){
+      throw new Error('You cannot modify this travel')
+    }
+    return this.travelRepository.merge(travel, {...updateTravelInput})
   }
 
   async remove(id: number) {
