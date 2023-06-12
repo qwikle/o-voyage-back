@@ -44,6 +44,13 @@ input CreateTravelInput {
 
 input UpdateTravelInput {
   id: Int!
+  title: String
+  from: String
+  to: String
+  departureDate: Date
+  arrivalDate: Date
+  budget: Int
+  numberOfAttendees: Int
 }
 
 type Query {
