@@ -6,6 +6,8 @@ import { SignInInput } from './dto/sign-in.input';
 import { Hash } from 'src/commons/bcrypt';
 import { GraphQLError } from 'graphql';
 import { OContext } from 'src/commons/context';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from './auth.guard';
 
 // TODO set roles in new folder
 @Resolver('Auth')
@@ -67,6 +69,7 @@ export class AuthResolver {
     });
   }
 
+  @UseGuards(AuthGuard)
   @Mutation('deleteAccount')
   async deleteAccount(@Context() ctx: OContext) {
     const { auth } = ctx.req;

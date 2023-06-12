@@ -18,7 +18,7 @@ export class EmailScalar implements CustomScalar<string, string> {
     if (!this.validateEmail(value)) {
       throw new GraphQLError('');
     }
-    return value;
+    return value.toLowerCase();
   }
 
   serialize(value: string): string {
@@ -31,6 +31,6 @@ export class EmailScalar implements CustomScalar<string, string> {
         extensions: { argumenName: this.field },
       });
     }
-    return ast.value;
+    return ast.value.toLowerCase();
   }
 }
