@@ -21,14 +21,15 @@ export class TravelsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} travel`;
+    return this.travelRepository.findOneBy({ id });
   }
 
   update(id: number, updateTravelInput: UpdateTravelInput) {
     return `This action updates a #${id} travel`;
   }
 
-  remove(id: number) {
-    return this.travelRepository.delete(id);
+  async remove(id: number) {
+    await this.travelRepository.delete(id);
+    return true;
   }
 }
