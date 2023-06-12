@@ -40,7 +40,7 @@ export class TravelsService {
     }
     if (auth.id !== travel.organizerId) {
       if (auth.role !== 2) {
-        throw new Error('You are not the organizer of this travel');
+        throw new Error('You are not allowed to update travel');
       }
 
       return this.travelRepository.merge(travel, { ...updateTravelInput });
