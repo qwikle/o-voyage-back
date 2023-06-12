@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import { CreateTravelInput } from './dto/create-travel.input';
 import { UpdateTravelInput } from './dto/update-travel.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Travel } from './entities/travel.entity';
 import { Repository } from 'typeorm';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Context } from '@nestjs/graphql';
+import { OContext } from 'src/commons/context';
 @Injectable()
 export class TravelsService {
   constructor(
@@ -24,12 +27,24 @@ export class TravelsService {
     return this.travelRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateTravelInput: UpdateTravelInput) {
-    const travel = await this.travelRepository.findOneBy({id})
-    if(!travel){
-      throw new Error('You cannot modify this travel')
+  @UseGuards(AuthGuard)
+  async update(
+    id: number,
+    updateTravelInput: UpdateTravelInput,
+    @Context() { req }: OContext,
+  ) {
+    const travel = await this.travelRepository.findOneBy({ id });
+    const { auth } = req;
+    if (!travel) {
+      throw new Error('Travel not found');
     }
-    return this.travelRepository.merge(travel, {...updateTravelInput})
+    if (auth.id !== travel.organizerId) {
+      if (auth.role !== 2) {
+        throw new Error('You are not the organizer of this travel');
+      }
+
+      return this.travelRepository.merge(travel, { ...updateTravelInput });
+    }
   }
 
   async remove(id: number) {
