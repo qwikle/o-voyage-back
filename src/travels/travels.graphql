@@ -7,13 +7,13 @@ type Travel {
   from: String!
   "The to of the travel"
   to: String!
-  "The departure_date of the travel"
+  "The departureDate of the travel"
   departureDate: String! # Date!
-  "The arrival_date of the travel"
+  "The arrivalDate of the travel"
   arrivalDate: String! # Date!
   "The budget of the travel"
   budget: Int!
-  "The number_attendees of the travel"
+  "The numberOfAttendees of the travel"
   numberOfAttendees: Int!
   "relation user - travel"
   organizerId: Int!
