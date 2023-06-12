@@ -53,4 +53,10 @@ export class AuthService {
     await this.userRepository.delete(user.id);
     return true;
   }
+
+  verifyRefreshToken(token: string) {
+    return this.jwtService.verifyAsync(token, {
+      secret: configuration().jwtRefreshSecret,
+    });
+  }
 }

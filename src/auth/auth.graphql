@@ -43,4 +43,5 @@ type Mutation {
   signUp(signUpInput: SignUpInput!): Auth!
   signIn(signInInput: SignInInput!): Auth!
   deleteAccount: Boolean!
+  refreshToken(refreshToken: String!): Token!
 }
