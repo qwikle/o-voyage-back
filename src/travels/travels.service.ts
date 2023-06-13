@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Travel } from './entities/travel.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
+
 @Injectable()
 export class TravelsService {
   constructor(
@@ -26,12 +27,14 @@ export class TravelsService {
   findOne(id: number) {
     return this.travelRepository.findOneBy({ id });
   }
+ 
+  async update(
+    travel: Travel,
+    updateTravelInput: UpdateTravelInput
+  ) {
+       travel = this.travelRepository.merge(travel, { ...updateTravelInput });
+       return this.travelRepository.save(travel);
 
-  async update(travel: Travel, updateTravelInput: UpdateTravelInput) {
-    const updatedTravel = await this.travelRepository.merge(travel, {
-      ...updateTravelInput,
-    });
-    return updatedTravel;
   }
 
   async remove(id: number) {
