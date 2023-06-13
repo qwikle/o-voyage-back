@@ -27,24 +27,13 @@ export class TravelsService {
     return this.travelRepository.findOneBy({ id });
   }
 
-  @UseGuards(AuthGuard)
+ 
   async update(
-    id: number,
-    updateTravelInput: UpdateTravelInput,
-    @Context() { req }: OContext,
+    travel: Travel,
+    updateTravelInput: UpdateTravelInput
   ) {
-    const travel = await this.travelRepository.findOneBy({ id });
-    const { auth } = req;
-    if (!travel) {
-      throw new Error('Travel not found');
-    }
-    if (auth.id !== travel.organizerId) {
-      if (auth.role !== 2) {
-        throw new Error('You are not allowed to update this travel');
-      }
-
-      return this.travelRepository.merge(travel, { ...updateTravelInput });
-    }
+      const updatedTravel = await this.travelRepository.merge(travel, { ...updateTravelInput });
+      return updatedTravel;
   }
 
   async remove(id: number) {

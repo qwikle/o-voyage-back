@@ -33,10 +33,23 @@ export class TravelsResolver {
     return this.travelsService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Mutation('updateTravel')
-  update(@Args('updateTravelInput') updateTravelInput: UpdateTravelInput) {
-    return this.travelsService.update(updateTravelInput.id, updateTravelInput);
-  }
+  async update(@Args('updateTravelInput') updateTravelInput: UpdateTravelInput,@Context() { req }: OContext,) {
+    const travel = await this.travelsService.findOne( updateTravelInput.id );
+    const { auth } = req;
+    if (!travel) {
+      throw new Error('Travel not found');
+    }
+    if (auth.id !== travel.organizerId) {
+      if (auth.role !== 2) {
+        throw new Error('You are not allowed to update this travel');
+      }
+    const finalTravel = await this.travelsService.update(travel, updateTravelInput);
+    console.log(finalTravel);
+    return finalTravel;
+    
+  }}
 
   // TODO refactor into another guard
   @UseGuards(AuthGuard)
