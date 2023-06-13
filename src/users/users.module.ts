@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 import { PasswordScalar } from '../scalars/password';
 import { EmailScalar } from 'src/scalars/email';
 import { Role } from './entities/role.entity';
+import { Hash } from 'src/commons/bcrypt';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role])],
@@ -16,6 +17,7 @@ import { Role } from './entities/role.entity';
     LoaderService,
     PasswordScalar,
     EmailScalar,
+    Hash,
   ],
 })
 export class UsersModule {}

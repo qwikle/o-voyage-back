@@ -9,9 +9,9 @@ type Travel {
   "The to of the travel"
   to: String!
   "The departureDate of the travel"
-  departureDate: String! # Date!
+  departureDate: Date! # Date!
   "The arrivalDate of the travel"
-  arrivalDate: String! # Date!
+  arrivalDate: Date! # Date!
   "The budget of the travel"
   budget: Int!
   "The numberOfAttendees of the travel"
@@ -61,5 +61,5 @@ type Query {
 type Mutation {
   createTravel(createTravelInput: CreateTravelInput!): Travel!
   updateTravel(updateTravelInput: UpdateTravelInput!): Travel!
-  removeTravel(id: Int!): Travel
+  removeTravel(id: Int!): Boolean!
 }

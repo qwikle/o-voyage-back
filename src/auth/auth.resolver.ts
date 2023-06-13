@@ -12,7 +12,10 @@ import { AuthGuard } from './auth.guard';
 // TODO set roles in new folder
 @Resolver('Auth')
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly hash: Hash,
+  ) {}
 
   @Mutation('signUp')
   async signUp(
@@ -49,10 +52,7 @@ export class AuthResolver {
     const { password, email } = SignInInput;
     const user = await this.authService.findByEmail(email);
     if (user) {
-      const isMatch = await Hash.getInstance().comparePassword(
-        password,
-        user.password,
-      );
+      const isMatch = await this.hash.comparePassword(password, user.password);
       if (isMatch) {
         const token = await this.authService.generateToken(user, ctx.req.ip);
         return {
@@ -81,5 +81,37 @@ export class AuthResolver {
       });
     }
     return this.authService.deleteAccount(user);
+  }
+
+  @Mutation('refreshToken')
+  async refreshToken(
+    @Args('refreshToken') token: string,
+    @Context() ctx: OContext,
+  ) {
+    try {
+      const tokenPayload = await this.authService.verifyRefreshToken(token);
+      const user = await this.authService.findById(tokenPayload.id);
+      if (!user || user.isBanned) {
+        throw new GraphQLError('User not found', {
+          extensions: {
+            code: 'NOT_FOUND',
+          },
+        });
+      }
+      if (tokenPayload.ip !== ctx.req.ip) {
+        throw new GraphQLError('Invalid token', {
+          extensions: {
+            code: 'UNAUTHENTICATED',
+          },
+        });
+      }
+      return this.authService.generateToken(user, ctx.req.ip);
+    } catch (error) {
+      throw new GraphQLError('Invalid token', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+        },
+      });
+    }
   }
 }
