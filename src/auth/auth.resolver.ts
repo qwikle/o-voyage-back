@@ -59,7 +59,7 @@ export class AuthResolver {
       if (isMatch) {
         const token = await this.authService.generateToken(
           user,
-          (ctx.req.headers['x-forwarded-for'] as string) || ctx.req.ip,
+          ctx.req.headers['x-real-ip'] as string,
         );
         return {
           user,
