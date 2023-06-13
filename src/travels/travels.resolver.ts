@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Context,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { TravelsService } from './travels.service';
 import { CreateTravelInput } from './dto/create-travel.input';
 import { UpdateTravelInput } from './dto/update-travel.input';
@@ -12,11 +20,16 @@ export class TravelsResolver {
 
   @UseGuards(AuthGuard)
   @Mutation('createTravel')
-  async create(@Args('createTravelInput') createTravelInput: CreateTravelInput, @Context() {req}: OContext) {
-    const travel = await this.travelsService.findOne(createTravelInput.organizerId);
+  async create(
+    @Args('createTravelInput') createTravelInput: CreateTravelInput,
+    @Context() { req }: OContext,
+  ) {
+    const travel = await this.travelsService.findOne(
+      createTravelInput.organizerId,
+    );
     const { auth } = req;
-    if(auth.id !== travel.organizerId){
-      if(auth.role !== 2){
+    if (auth.id !== travel.organizerId) {
+      if (auth.role !== 2) {
         throw new Error('You are not the organizer of this travel');
       }
     }
@@ -35,8 +48,11 @@ export class TravelsResolver {
 
   @UseGuards(AuthGuard)
   @Mutation('updateTravel')
-  async update(@Args('updateTravelInput') updateTravelInput: UpdateTravelInput,@Context() { req }: OContext,) {
-    const travel = await this.travelsService.findOne( updateTravelInput.id );
+  async update(
+    @Args('updateTravelInput') updateTravelInput: UpdateTravelInput,
+    @Context() { req }: OContext,
+  ) {
+    const travel = await this.travelsService.findOne(updateTravelInput.id);
     const { auth } = req;
     if (!travel) {
       throw new Error('Travel not found');
@@ -45,11 +61,14 @@ export class TravelsResolver {
       if (auth.role !== 2) {
         throw new Error('You are not allowed to update this travel');
       }
-    const finalTravel = await this.travelsService.update(travel, updateTravelInput);
-    console.log(finalTravel);
-    return finalTravel;
-    
-  }}
+      const finalTravel = await this.travelsService.update(
+        travel,
+        updateTravelInput,
+      );
+      console.log(finalTravel);
+      return finalTravel;
+    }
+  }
 
   // TODO refactor into another guard
   @UseGuards(AuthGuard)
@@ -66,5 +85,15 @@ export class TravelsResolver {
       }
     }
     return this.travelsService.remove(id);
+  }
+
+  @ResolveField('attendees')
+  async getAttendees(@Parent() travel) {
+    return this.travelsService.getAttendees(travel.id);
+  }
+
+  @ResolveField('organizer')
+  async getOrganizer(@Parent() travel) {
+    return this.travelsService.getOrganizer(travel.organizerId);
   }
 }
