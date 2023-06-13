@@ -1,38 +1,37 @@
-import { User } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from 'src/users/entities/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Travel {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    title: string;
+  @Column()
+  title: string;
 
-    @Column()
-    from: string;
+  @Column()
+  from: string;
 
-    @Column()
-    to: string;
+  @Column()
+  to: string;
 
-    @Column({type: "timestamptz"})
-    departureDate: Date;
+  @Column({ type: 'timestamptz' })
+  departureDate: Date;
 
-    @Column({type: "timestamptz"})
-    arrivalDate: Date;
+  @Column({ type: 'timestamptz' })
+  arrivalDate: Date;
 
-    @Column()
-    budget: number;
+  @Column()
+  budget: number;
 
-    @Column()
-    numberOfAttendees: number;
+  @Column()
+  numberOfAttendees: number;
 
-    @Column()
-    organizerId: number;
+  @Column()
+  organizerId: number;
 
-    @ManyToOne(() => User, (user) => user.id)
-    organizer: User;
+  @ManyToOne(() => User, (user) => user.id)
+  organizer: User;
 
-    // TODO @ManyToMany(() => User, (user) => user.travels)
-
+  // TODO @ManyToMany(() => User, (user) => user.travels)
 }

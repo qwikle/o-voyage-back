@@ -9,9 +9,7 @@ export class DateScalar implements CustomScalar<string, Date> {
   private field = 'date';
 
   private validateDate(value: string): boolean {
-    const dateRegex = new RegExp(
-      /^(\d{4})-(\d{2})-(\d{2})$/,
-    );
+    const dateRegex = new RegExp(/^(\d{4})-(\d{2})-(\d{2})$/);
     return dateRegex.test(value);
   }
 
@@ -23,7 +21,7 @@ export class DateScalar implements CustomScalar<string, Date> {
   }
 
   serialize(value: Date): string {
-    return value.toISOString();
+    return value.toISOString().slice(0, 10);
   }
 
   parseLiteral(ast: ValueNode): Date {
