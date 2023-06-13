@@ -37,10 +37,7 @@ export class AuthResolver {
       });
     }
     const createdUser = await this.authService.createUser(createAuthInput);
-    const token = await this.authService.generateToken(
-      createdUser,
-      (ctx.req.headers['x-forwarded-for'] as string) || ctx.req.ip,
-    );
+    const token = await this.authService.generateToken(createdUser, ctx.req.ip);
     return { user: createdUser, token };
   }
 
@@ -57,10 +54,7 @@ export class AuthResolver {
         user.password,
       );
       if (isMatch) {
-        const token = await this.authService.generateToken(
-          user,
-          ctx.req.headers['x-forwarded-for'] as string,
-        );
+        const token = await this.authService.generateToken(user, ctx.req.ip);
         return {
           user,
           token,
