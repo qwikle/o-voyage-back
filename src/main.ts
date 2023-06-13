@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: { origin: '*' },
   });
-  app.set('trust proxy', true);
+  app.set('trust proxy', 1);
   await app.listen(process.env.PORT || 3000, () => {
     if (process.env.NODE_ENV !== 'production') {
       console.log(
