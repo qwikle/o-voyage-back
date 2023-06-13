@@ -13,6 +13,7 @@ import { UpdateTravelInput } from './dto/update-travel.input';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { OContext } from 'src/commons/context';
+import { Travel } from 'src/graphql';
 
 @Resolver('Travel')
 export class TravelsResolver {
@@ -88,7 +89,7 @@ export class TravelsResolver {
   }
 
   @ResolveField('attendees')
-  async getAttendees(@Parent() travel) {
+  async getAttendees(@Parent() travel: Travel) {
     return this.travelsService.getAttendees(travel.id);
   }
 
