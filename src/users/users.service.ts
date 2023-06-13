@@ -4,14 +4,12 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { User } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { LoaderService } from 'src/commons/dataloader';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
-    // private loaderService: LoaderService,
+    private userRepository: Repository<User>, // private loaderService: LoaderService,
   ) {}
 
   async createUser(createUserInput: CreateUserInput) {
