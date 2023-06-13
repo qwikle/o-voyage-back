@@ -45,11 +45,10 @@ export class TravelsResolver {
       if (auth.role !== 2) {
         throw new Error('You are not allowed to update this travel');
       }
-    const finalTravel = await this.travelsService.update(travel, updateTravelInput);
-    console.log(finalTravel);
+    }
+      const finalTravel = this.travelsService.update(travel, updateTravelInput);
     return finalTravel;
-    
-  }}
+  }
 
   // TODO refactor into another guard
   @UseGuards(AuthGuard)
