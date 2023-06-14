@@ -7,11 +7,14 @@ import { UseGuards } from '@nestjs/common';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { User } from './entities/user.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { AdminGuard } from 'src/commons/guards/admin.guard';
 
 @Resolver('User')
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard, AdminGuard)
   @Mutation('createUser')
   async create(@Args('createUserInput') createUserInput: CreateUserInput) {
     const user = await this.usersService.findByEmail(createUserInput.email);
@@ -34,17 +37,19 @@ export class UsersResolver {
     return this.usersService.createUser(createUserInput);
   }
 
+  @UseGuards(AuthGuard, AdminGuard)
   @Query('users')
   findAll() {
     return this.usersService.findAll();
   }
 
+  @UseGuards(AuthGuard, AdminGuard)
   @Query('user')
   findOne(@Args('id') id: number) {
     return this.usersService.findOne(id);
   }
 
-  @UseGuards(ExistsGuard)
+  @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
   @Entity('User')
   @Mutation('updateUser')
   update(
@@ -54,7 +59,7 @@ export class UsersResolver {
     return this.usersService.update(user, updateUserInput);
   }
 
-  @UseGuards(ExistsGuard)
+  @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
   @Entity('User')
   @Mutation('removeUser')
   remove(@Args('id') id: number) {

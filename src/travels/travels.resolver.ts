@@ -16,6 +16,7 @@ import { OContext } from 'src/commons/types/context';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { Travel } from './entities/travel.entity';
+import { Role } from 'src/commons/guards/admin.guard';
 
 @Resolver('Travel')
 export class TravelsResolver {
@@ -32,16 +33,21 @@ export class TravelsResolver {
     );
     const { auth } = req;
     if (auth.id !== travel.organizerId) {
-      if (auth.role !== 2) {
+      if (auth.role !== Role.ADMIN) {
         throw new Error('You are not the organizer of this travel');
       }
     }
     return this.travelsService.create(createTravelInput);
   }
 
+  @UseGuards(AuthGuard)
   @Query('travels')
-  findAll() {
-    return this.travelsService.findAll();
+  findAll(@Context() { req }: OContext) {
+    const { auth } = req;
+    if (auth.role === Role.ADMIN) {
+      return this.travelsService.findAll();
+    }
+    return this.travelsService.findAllByOrganizerId(auth.id);
   }
 
   @Query('travel')
@@ -59,7 +65,7 @@ export class TravelsResolver {
   ) {
     const { auth } = req;
     if (auth.id !== travel.organizerId) {
-      if (auth.role !== 2) {
+      if (auth.role !== Role.ADMIN) {
         throw new Error('You are not allowed to update this travel');
       }
     }
@@ -77,7 +83,7 @@ export class TravelsResolver {
   ) {
     const { auth } = req;
     if (travel.organizerId !== auth.id) {
-      if (auth.role !== 2) {
+      if (auth.role !== Role.ADMIN) {
         throw new Error('You are not the organizer of this travel');
       }
     }
