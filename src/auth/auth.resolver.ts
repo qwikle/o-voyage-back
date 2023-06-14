@@ -5,7 +5,7 @@ import { SignUpInput } from './dto/sign-up.Input';
 import { SignInInput } from './dto/sign-in.input';
 import { Hash } from 'src/commons/bcrypt';
 import { GraphQLError } from 'graphql';
-import { OContext } from 'src/commons/context';
+import { OContext } from 'src/commons/types/context';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
 

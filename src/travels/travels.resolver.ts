@@ -12,7 +12,7 @@ import { CreateTravelInput } from './dto/create-travel.input';
 import { UpdateTravelInput } from './dto/update-travel.input';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { OContext } from 'src/commons/context';
+import { OContext } from 'src/commons/types/context';
 import { Travel } from 'src/graphql';
 
 @Resolver('Travel')
