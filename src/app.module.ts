@@ -13,6 +13,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { TravelsModule } from './travels/travels.module';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { TravelsModule } from './travels/travels.module';
     }),
     AuthModule,
     TravelsModule,
+    ActivitiesModule,
   ],
   controllers: [],
   providers: [AppService],

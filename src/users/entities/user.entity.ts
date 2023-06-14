@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import { Hash } from 'src/commons/bcrypt';
 import { Role } from './role.entity';
-import { Inject, Injectable } from '@nestjs/common';
 
 @Entity('user')
 export class User {

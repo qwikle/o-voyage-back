@@ -4,8 +4,8 @@ import { UsersResolver } from './users.resolver';
 import { LoaderService } from 'src/commons/dataloader';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { PasswordScalar } from '../scalars/password';
-import { EmailScalar } from 'src/scalars/email';
+import { PasswordScalar } from '../commons/scalars/password';
+import { EmailScalar } from 'src/commons/scalars/email';
 import { Role } from './entities/role.entity';
 import { Hash } from 'src/commons/bcrypt';
 
