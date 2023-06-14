@@ -1,0 +1,24 @@
+type Activity {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input CreateActivityInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateActivityInput {
+  id: Int!
+}
+
+type Query {
+  activities: [Activity]!
+  activity(id: Int!): Activity
+}
+
+type Mutation {
+  createActivity(createActivityInput: CreateActivityInput!): Activity!
+  updateActivity(updateActivityInput: UpdateActivityInput!): Activity!
+  removeActivity(id: Int!): Activity
+}
