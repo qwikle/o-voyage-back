@@ -54,8 +54,7 @@ export class AuthResolver {
     if (user) {
       const isMatch = await this.hash.comparePassword(password, user.password);
       if (isMatch) {
-        const { ip } = ctx.req;
-        const token = await this.authService.generateToken(user, ip);
+        const token = await this.authService.generateToken(user, ctx.req.ip);
         return {
           user,
           token,
