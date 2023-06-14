@@ -26,6 +26,9 @@ import { ActivitiesModule } from './activities/activities.module';
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useFactory: async () => ({
+        buildSchemaOptions: {
+          directives: [],
+        },
         introspection: true,
         path: '/',
         playground: false,
