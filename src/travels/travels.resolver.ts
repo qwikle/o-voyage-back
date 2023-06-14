@@ -13,7 +13,9 @@ import { UpdateTravelInput } from './dto/update-travel.input';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { OContext } from 'src/commons/types/context';
-import { Travel } from 'src/graphql';
+import { ExistsGuard } from 'src/commons/guards/exists.guard';
+import { Entity } from 'src/commons/guards/Entity.decorator';
+import { Travel } from './entities/travel.entity';
 
 @Resolver('Travel')
 export class TravelsResolver {
@@ -47,17 +49,15 @@ export class TravelsResolver {
     return this.travelsService.findOne(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ExistsGuard)
+  @Entity('Travel')
   @Mutation('updateTravel')
   async update(
     @Args('updateTravelInput') updateTravelInput: UpdateTravelInput,
     @Context() { req }: OContext,
+    @Context('updateTravel') travel: Travel,
   ) {
-    const travel = await this.travelsService.findOne(updateTravelInput.id);
     const { auth } = req;
-    if (!travel) {
-      throw new Error('Travel not found');
-    }
     if (auth.id !== travel.organizerId) {
       if (auth.role !== 2) {
         throw new Error('You are not allowed to update this travel');
@@ -68,20 +68,20 @@ export class TravelsResolver {
   }
 
   // TODO refactor into another guard
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ExistsGuard)
+  @Entity('Travel')
   @Mutation('removeTravel')
-  async remove(@Args('id') id: number, @Context() { req }: OContext) {
-    const travel = await this.travelsService.findOne(id);
-    if (!travel) {
-      throw new Error('Travel not found');
-    }
+  async remove(
+    @Context() { req }: OContext,
+    @Context('removeTravel') travel: Travel,
+  ) {
     const { auth } = req;
     if (travel.organizerId !== auth.id) {
       if (auth.role !== 2) {
         throw new Error('You are not the organizer of this travel');
       }
     }
-    return this.travelsService.remove(id);
+    return this.travelsService.remove(travel.id);
   }
 
   @ResolveField('attendees')

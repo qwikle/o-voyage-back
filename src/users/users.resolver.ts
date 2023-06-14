@@ -1,8 +1,12 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { GraphQLError } from 'graphql';
+import { UseGuards } from '@nestjs/common';
+import { ExistsGuard } from 'src/commons/guards/exists.guard';
+import { Entity } from 'src/commons/guards/Entity.decorator';
+import { User } from './entities/user.entity';
 
 @Resolver('User')
 export class UsersResolver {
@@ -40,11 +44,18 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(ExistsGuard)
+  @Entity('User')
   @Mutation('updateUser')
-  update(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
+  update(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Context('updateUser') user: User,
+  ) {
+    return this.usersService.update(user, updateUserInput);
   }
 
+  @UseGuards(ExistsGuard)
+  @Entity('User')
   @Mutation('removeUser')
   remove(@Args('id') id: number) {
     return this.usersService.remove(id);
