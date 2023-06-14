@@ -54,4 +54,8 @@ export class TravelsService {
   async getOrganizer(id: number) {
     return this.userRepository.findOneBy({ id });
   }
+
+  async findAllByOrganizerId(organizerId: number) {
+    return this.travelRepository.find({ where: { organizerId } });
+  }
 }
