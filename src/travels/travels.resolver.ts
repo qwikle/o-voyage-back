@@ -63,9 +63,8 @@ export class TravelsResolver {
         throw new Error('You are not allowed to update this travel');
       }
     }
-      const finalTravel = this.travelsService.update(travel, updateTravelInput);
+    const finalTravel = this.travelsService.update(travel, updateTravelInput);
     return finalTravel;
-
   }
 
   // TODO refactor into another guard

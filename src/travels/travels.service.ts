@@ -27,14 +27,10 @@ export class TravelsService {
   findOne(id: number) {
     return this.travelRepository.findOneBy({ id });
   }
- 
-  async update(
-    travel: Travel,
-    updateTravelInput: UpdateTravelInput
-  ) {
-       travel = this.travelRepository.merge(travel, { ...updateTravelInput });
-       return this.travelRepository.save(travel);
 
+  async update(travel: Travel, updateTravelInput: UpdateTravelInput) {
+    travel = this.travelRepository.merge(travel, { ...updateTravelInput });
+    return this.travelRepository.save(travel);
   }
 
   async remove(id: number) {
@@ -46,11 +42,11 @@ export class TravelsService {
     const travel = await this.userRepository
       .createQueryBuilder('user')
       .leftJoin(
-        'has_attendees',
-        'has_attendees',
-        'has_attendees.attendee_id = user.id',
+        'has_travelers',
+        'has_travelers',
+        'has_travelers.attendee_id = user.id',
       )
-      .where('has_attendees.travel_id = :travelId', { travelId: id })
+      .where('has_travelers.travel_id = :travelId', { travelId: id })
       .getMany();
     return travel;
   }
