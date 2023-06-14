@@ -32,17 +32,14 @@ export class UsersService {
     });
   }
 
-  async update(id: number, updateUserInput: UpdateUserInput) {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) {
-      // todo replace null by throw graphql error
-      return null;
-    }
-    return this.userRepository.merge(user, { ...updateUserInput });
+  update(user: User, updateUserInput: UpdateUserInput) {
+    user = this.userRepository.merge(user, { ...updateUserInput });
+    return this.userRepository.save(user);
   }
 
-  remove(id: number) {
-    return this.userRepository.delete(id);
+  async remove(id: number) {
+    await this.userRepository.delete(id);
+    return true;
   }
 
   findByEmail(email: string) {

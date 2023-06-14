@@ -3,6 +3,6 @@ import { ActivitiesService } from './activities.service';
 import { ActivitiesResolver } from './activities.resolver';
 
 @Module({
-  providers: [ActivitiesResolver, ActivitiesService]
+  providers: [ActivitiesResolver, ActivitiesService],
 })
 export class ActivitiesModule {}

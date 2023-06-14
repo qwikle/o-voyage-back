@@ -8,7 +8,9 @@ export class ActivitiesResolver {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
   @Mutation('createActivity')
-  create(@Args('createActivityInput') createActivityInput: CreateActivityInput) {
+  create(
+    @Args('createActivityInput') createActivityInput: CreateActivityInput,
+  ) {
     return this.activitiesService.create(createActivityInput);
   }
 
@@ -23,8 +25,13 @@ export class ActivitiesResolver {
   }
 
   @Mutation('updateActivity')
-  update(@Args('updateActivityInput') updateActivityInput: UpdateActivityInput) {
-    return this.activitiesService.update(updateActivityInput.id, updateActivityInput);
+  update(
+    @Args('updateActivityInput') updateActivityInput: UpdateActivityInput,
+  ) {
+    return this.activitiesService.update(
+      updateActivityInput.id,
+      updateActivityInput,
+    );
   }
 
   @Mutation('removeActivity')
