@@ -1,15 +1,42 @@
 type Activity {
-  # Example field (placeholder)
-  exampleField: Int
+  "The id of the activity"
+  id: Int!
+  "The name of the activity"
+  name: String!
+  "The price of the activity"
+  price: Int!
+  "The location of the activity"
+  location: String!
+  "The member of the activity"
+  member: Int!
+  "The time of the activity"
+  time: String! 
+  "The date of the activity"
+  date: Date! 
+  "The travel_id of the activity"
+  travel_id: Int!
 }
 
 input CreateActivityInput {
-  # Example field (placeholder)
-  exampleField: Int
+  id: Int!
+  name: String!
+  price: Int!
+  location: String!
+  member: Int!
+  time: String!
+  date: Date!
+  travel_id: Int!
 }
 
 input UpdateActivityInput {
   id: Int!
+  name: String
+  price: Int
+  location: String
+  member: Int
+  time: String
+  date: Date
+  travel_id: Int
 }
 
 type Query {
