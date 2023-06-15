@@ -1,16 +1,20 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityInput } from './dto/create-activity.input';
 import { UpdateActivityInput } from './dto/update-activity.input';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
+  @UseGuards(AuthGuard)
   @Mutation('createActivity')
-  create(
+  async create(
     @Args('createActivityInput') createActivityInput: CreateActivityInput,
   ) {
+    // TODO check if user is organizer of the travel
     return this.activitiesService.create(createActivityInput);
   }
 

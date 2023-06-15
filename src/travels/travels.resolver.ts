@@ -17,6 +17,9 @@ import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { Travel } from './entities/travel.entity';
 import { Role } from 'src/commons/guards/admin.guard';
+import { AllowedGuard } from 'src/commons/guards/allowed.guard';
+import { Property } from 'src/commons/guards/Property.decorator';
+import { GraphQLError } from 'graphql';
 
 @Resolver('Travel')
 export class TravelsResolver {
@@ -28,13 +31,15 @@ export class TravelsResolver {
     @Args('createTravelInput') createTravelInput: CreateTravelInput,
     @Context() { req }: OContext,
   ) {
-    const travel = await this.travelsService.findOne(
-      createTravelInput.organizerId,
-    );
     const { auth } = req;
-    if (auth.id !== travel.organizerId) {
+    if (auth.id !== createTravelInput.organizerId) {
       if (auth.role !== Role.ADMIN) {
-        throw new Error('You are not the organizer of this travel');
+        throw new GraphQLError('Permission Denied', {
+          extensions: {
+            code: 'FORBIDDEN',
+            argumentName: 'organizerId',
+          },
+        });
       }
     }
     return this.travelsService.create(createTravelInput);
@@ -55,38 +60,24 @@ export class TravelsResolver {
     return this.travelsService.findOne(id);
   }
 
-  @UseGuards(AuthGuard, ExistsGuard)
+  @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Travel')
+  @Property('organizerId')
   @Mutation('updateTravel')
   async update(
     @Args('updateTravelInput') updateTravelInput: UpdateTravelInput,
-    @Context() { req }: OContext,
     @Context('updateTravel') travel: Travel,
   ) {
-    const { auth } = req;
-    if (auth.id !== travel.organizerId) {
-      if (auth.role !== Role.ADMIN) {
-        throw new Error('You are not allowed to update this travel');
-      }
-    }
     const finalTravel = this.travelsService.update(travel, updateTravelInput);
     return finalTravel;
   }
 
   // TODO refactor into another guard
-  @UseGuards(AuthGuard, ExistsGuard)
+  @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Travel')
+  @Property('organizerId')
   @Mutation('removeTravel')
-  async remove(
-    @Context() { req }: OContext,
-    @Context('removeTravel') travel: Travel,
-  ) {
-    const { auth } = req;
-    if (travel.organizerId !== auth.id) {
-      if (auth.role !== Role.ADMIN) {
-        throw new Error('You are not the organizer of this travel');
-      }
-    }
+  async remove(@Context('removeTravel') travel: Travel) {
     return this.travelsService.remove(travel.id);
   }
 

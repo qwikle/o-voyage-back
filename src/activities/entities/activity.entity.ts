@@ -28,7 +28,7 @@ export class Activity {
     date: Date;
 
     @Column()
-    travel_id: number;
+    travelId: number;
 
     @ManyToOne(() => Travel, (travel) => travel.id)
     travel: Travel;
