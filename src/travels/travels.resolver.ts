@@ -90,7 +90,7 @@ export class TravelsResolver {
 
   @ResolveField('attendees')
   async getAttendees(@Parent() travel: Travel) {
-    return this.travelsService.getAttendees(travel.id);
+    return this.dataloaderService.getAttendees().load(travel.id);
   }
 
   @ResolveField('organizer')
