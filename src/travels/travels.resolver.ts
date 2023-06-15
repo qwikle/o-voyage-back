@@ -20,10 +20,14 @@ import { Role } from 'src/commons/guards/admin.guard';
 import { AllowedGuard } from 'src/commons/guards/allowed.guard';
 import { Property } from 'src/commons/guards/Property.decorator';
 import { GraphQLError } from 'graphql';
+import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 
 @Resolver('Travel')
 export class TravelsResolver {
-  constructor(private readonly travelsService: TravelsService) {}
+  constructor(
+    private readonly travelsService: TravelsService,
+    private readonly dataloaderService: DataloaderService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Mutation('createTravel')
@@ -60,7 +64,7 @@ export class TravelsResolver {
 
   @Query('travel')
   findOne(@Args('id') id: number) {
-    return this.travelsService.findOne(id);
+    return this.dataloaderService.getTravelDataLoader().load(id);
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
@@ -91,6 +95,6 @@ export class TravelsResolver {
 
   @ResolveField('organizer')
   async getOrganizer(@Parent() travel) {
-    return this.travelsService.getOrganizer(travel.organizerId);
+    return this.dataloaderService.getUserDataLoader().load(travel.organizerId);
   }
 }

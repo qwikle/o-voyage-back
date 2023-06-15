@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Context,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
@@ -9,10 +17,14 @@ import { Entity } from 'src/commons/guards/Entity.decorator';
 import { User } from './entities/user.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AdminGuard } from 'src/commons/guards/admin.guard';
+import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 
 @Resolver('User')
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private dataLoaderService: DataloaderService,
+  ) {}
 
   @UseGuards(AuthGuard, AdminGuard)
   @Mutation('createUser')
@@ -46,7 +58,7 @@ export class UsersResolver {
   @UseGuards(AuthGuard, AdminGuard)
   @Query('user')
   findOne(@Args('id') id: number) {
-    return this.usersService.findOne(id);
+    return this.dataLoaderService.getUserDataLoader().load(id);
   }
 
   @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
@@ -64,5 +76,11 @@ export class UsersResolver {
   @Mutation('removeUser')
   remove(@Args('id') id: number) {
     return this.usersService.remove(id);
+  }
+
+  @UseGuards(AuthGuard, AdminGuard)
+  @ResolveField('role')
+  role(@Parent() user: User) {
+    return this.dataLoaderService.getRoleDataLoader().load(user.roleId);
   }
 }
