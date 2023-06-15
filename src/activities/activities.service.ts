@@ -29,7 +29,8 @@ export class ActivitiesService {
     return `This action updates a #${id} activity`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} activity`;
+  async remove(id: number) {
+    await this.activityRepository.delete(id)
+    return true;
   }
 }
