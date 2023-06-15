@@ -1,3 +1,5 @@
+scalar Time
+
 type Activity {
   "The id of the activity"
   id: Int!
@@ -7,14 +9,14 @@ type Activity {
   price: Int!
   "The location of the activity"
   location: String!
-  "The member of the activity"
-  member: Int!
+  "The members of the activity"
+  members: Int!
   "The time of the activity"
-  time: String! 
+  time: Time! 
   "The date of the activity"
   date: Date! 
-  "The travel_id of the activity"
-  travel_id: Int!
+  "The travelId of the activity"
+  travelId: Int!
 }
 
 input CreateActivityInput {
@@ -22,10 +24,10 @@ input CreateActivityInput {
   name: String!
   price: Int!
   location: String!
-  member: Int!
+  members: Int!
   time: String!
   date: Date!
-  travel_id: Int!
+  travelId: Int!
 }
 
 input UpdateActivityInput {
@@ -36,7 +38,6 @@ input UpdateActivityInput {
   member: Int
   time: String
   date: Date
-  travel_id: Int
 }
 
 type Query {
