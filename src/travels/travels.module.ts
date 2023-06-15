@@ -5,9 +5,10 @@ import { DateScalar } from 'src/commons/scalars/date';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Travel } from './entities/travel.entity';
 import { User } from 'src/users/entities/user.entity';
+import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Travel, User])],
-  providers: [TravelsResolver, TravelsService, DateScalar],
+  providers: [TravelsResolver, TravelsService, DateScalar, DataloaderService],
 })
 export class TravelsModule {}

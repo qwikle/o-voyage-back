@@ -1,37 +1,33 @@
 import { Travel } from 'src/travels/entities/travel.entity';
-import { Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    ManyToOne
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 @Entity('activity')
 export class Activity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column()
-    price: number;
+  @Column()
+  price: number;
 
-    @Column()
-    location: string;
+  @Column()
+  location: string;
 
-    @Column()
-    members: number;
+  @Column()
+  members: number;
 
-    @Column({ type: 'time'})
-    time: string;
+  @Column({ type: 'time' })
+  time: string;
 
-    @Column({ type: 'date'})
-    date: Date;
+  @Column({ type: 'date' })
+  date: Date;
 
-    @Column()
-    travelId: number;
+  @Column()
+  travelId: number;
 
-    @ManyToOne(() => Travel, (travel) => travel.id)
-    travel: Travel;
+  @ManyToOne(() => Travel, (travel) => travel.id)
+  travel: Travel;
 
-    //TODO add categories 
+  //TODO add categories
 }

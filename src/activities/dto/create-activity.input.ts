@@ -2,24 +2,24 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateActivityInput {
-    @Field()
-    name: string;
+  @Field()
+  name: string;
 
-    @Field()
-    price: number;
+  @Field()
+  price: number;
 
-    @Field()
-    location: string;
+  @Field()
+  location: string;
 
-    @Field()
-    members: number;
+  @Field()
+  members: number;
 
-    @Field()
-    time: string;
+  @Field()
+  time: string;
 
-    @Field()
-    date: Date;
+  @Field()
+  date: Date;
 
-    @Field()
-    travelId: number;
+  @Field()
+  travelId: number;
 }

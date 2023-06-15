@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { TravelsModule } from './travels/travels.module';
 import { ActivitiesModule } from './activities/activities.module';
+import { DataloaderModule } from './commons/dataloader/dataloader.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { ActivitiesModule } from './activities/activities.module';
     AuthModule,
     TravelsModule,
     ActivitiesModule,
+    DataloaderModule,
   ],
   controllers: [],
   providers: [AppService],
