@@ -64,7 +64,7 @@ export class TravelsResolver {
 
   @Query('travel')
   findOne(@Args('id') id: number) {
-    return this.dataloaderService.getTravelDataLoader().load(id);
+    return this.dataloaderService.getByTravel().load(id);
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
@@ -94,7 +94,7 @@ export class TravelsResolver {
   }
 
   @ResolveField('organizer')
-  async getOrganizer(@Parent() travel) {
-    return this.dataloaderService.getUserDataLoader().load(travel.organizerId);
+  async getOrganizer(@Parent() travel: Travel) {
+    return this.dataloaderService.getByUser().load(travel.organizerId);
   }
 }

@@ -2,10 +2,14 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityInput } from './dto/create-activity.input';
 import { UpdateActivityInput } from './dto/update-activity.input';
+import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
-  constructor(private readonly activitiesService: ActivitiesService) {}
+  constructor(
+    private readonly activitiesService: ActivitiesService,
+    private readonly dataloaderService: DataloaderService,
+  ) {}
 
   @Mutation('createActivity')
   create(
@@ -21,7 +25,7 @@ export class ActivitiesResolver {
 
   @Query('activity')
   findOne(@Args('id') id: number) {
-    return this.activitiesService.findOne(id);
+    return this.dataloaderService.getByActivity().load(id);
   }
 
   @Mutation('updateActivity')

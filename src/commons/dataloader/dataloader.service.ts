@@ -10,34 +10,34 @@ export class DataloaderService {
   private activityDataLoader: DataLoader<number, any>;
 
   constructor(private readonly dataSource: DataSource) {
-    this.roleDataLoader = this.generateDataLoader('Role');
-    this.userDataLoader = this.generateDataLoader('User');
-    this.travelDataLoader = this.generateDataLoader('Travel');
-    this.activityDataLoader = this.generateDataLoader('Activity');
+    this.roleDataLoader = this.generateDataLoader('Role', 'id');
+    this.userDataLoader = this.generateDataLoader('User', 'id');
+    this.travelDataLoader = this.generateDataLoader('Travel', 'id');
+    this.activityDataLoader = this.generateDataLoader('Activity', 'id');
   }
 
-  private generateDataLoader = (entityName: string) => {
+  private generateDataLoader = (entityName: string, key: any) => {
     return new DataLoader(async (ids: number[]) => {
       const results = await this.dataSource.manager
         .getRepository(entityName)
-        .findBy({ id: Any(ids) });
-      return ids.map((id) => results.find((result) => result.id === id));
+        .find({ where: { [key]: Any(ids) } });
+      return ids.map((id) => results.find((result) => result[key] === id));
     });
   };
 
-  public getRoleDataLoader(): DataLoader<number, any> {
+  public getByRole(): DataLoader<number, any> {
     return this.roleDataLoader;
   }
 
-  public getUserDataLoader(): DataLoader<number, any> {
+  public getByUser(): DataLoader<number, any> {
     return this.userDataLoader;
   }
 
-  public getTravelDataLoader(): DataLoader<number, any> {
+  public getByTravel(): DataLoader<number, any> {
     return this.travelDataLoader;
   }
 
-  public getActivityDataLoader(): DataLoader<number, any> {
+  public getByActivity(): DataLoader<number, any> {
     return this.activityDataLoader;
   }
 }

@@ -58,7 +58,7 @@ export class UsersResolver {
   @UseGuards(AuthGuard, AdminGuard)
   @Query('user')
   findOne(@Args('id') id: number) {
-    return this.dataLoaderService.getUserDataLoader().load(id);
+    return this.dataLoaderService.getByUser().load(id);
   }
 
   @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
@@ -81,6 +81,6 @@ export class UsersResolver {
   @UseGuards(AuthGuard, AdminGuard)
   @ResolveField('role')
   role(@Parent() user: User) {
-    return this.dataLoaderService.getRoleDataLoader().load(user.roleId);
+    return this.dataLoaderService.getByRole().load(user.roleId);
   }
 }
