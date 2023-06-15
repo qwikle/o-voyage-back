@@ -35,11 +35,8 @@ export class TravelsResolver {
     @Args('createTravelInput') createTravelInput: CreateTravelInput,
     @Context() { req }: OContext,
   ) {
-    const travel = await this.travelsService.findOne(
-      createTravelInput.organizerId,
-    );
     const { auth } = req;
-    if (auth.id !== travel.organizerId) {
+    if (auth.id !== createTravelInput.organizerId) {
       if (auth.role !== Role.ADMIN) {
         throw new GraphQLError('Permission Denied', {
           extensions: {
