@@ -1,3 +1,5 @@
+scalar Time
+
 type Activity {
   "The id of the activity"
   id: Int!
@@ -10,7 +12,7 @@ type Activity {
   "The member of the activity"
   member: Int!
   "The time of the activity"
-  time: String! 
+  time: Time! 
   "The date of the activity"
   date: Date! 
   "The travel_id of the activity"
