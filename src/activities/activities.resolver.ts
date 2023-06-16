@@ -8,6 +8,8 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { AllowedGuard } from 'src/commons/guards/allowed.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
+import { Property } from 'src/commons/guards/Property.decorator';
+import { Activity } from './entities/activity.entity';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
@@ -35,14 +37,16 @@ export class ActivitiesResolver {
     return this.dataloaderService.getByActivity().load(id);
   }
 
+    @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
+  @Entity('Activity')
+  @Property('travelId')
   @Mutation('updateActivity')
   update(
     @Args('updateActivityInput') updateActivityInput: UpdateActivityInput,
+    @Context("updateActivity") activity: Activity,
   ) {
-    return this.activitiesService.update(
-      updateActivityInput.id,
-      updateActivityInput,
-    );
+    const updatedActivity = this.activitiesService.update(activity, updateActivityInput);
+    return updatedActivity;
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)

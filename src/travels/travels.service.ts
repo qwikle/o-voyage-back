@@ -28,7 +28,7 @@ export class TravelsService {
     return this.travelRepository.findOneBy({ id });
   }
 
-  async update(travel: Travel, updateTravelInput: UpdateTravelInput) {
+  update(travel: Travel, updateTravelInput: UpdateTravelInput) {
     travel = this.travelRepository.merge(travel, { ...updateTravelInput });
     return this.travelRepository.save(travel);
   }
