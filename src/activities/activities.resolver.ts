@@ -18,7 +18,6 @@ export class ActivitiesResolver {
     @Args('createActivityInput') createActivityInput: CreateActivityInput,
   ) {
     // TODO check if user is organizer of the travel
-    console.log(createActivityInput);
     return this.activitiesService.create(createActivityInput);
   }
 
