@@ -81,7 +81,7 @@ export class TravelsResolver {
   @Entity('Travel')
   @Property('organizerId')
   @Mutation('removeTravel')
-  async remove(@Context('removeTravel') travel: Travel) {
+  remove(@Context('removeTravel') travel: Travel) {
     return this.travelsService.remove(travel.id);
   }
 

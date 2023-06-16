@@ -5,6 +5,9 @@ import { UpdateActivityInput } from './dto/update-activity.input';
 import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { ExistsGuard } from 'src/commons/guards/exists.guard';
+import { AllowedGuard } from 'src/commons/guards/allowed.guard';
+import { Entity } from 'src/commons/guards/Entity.decorator';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
@@ -42,6 +45,8 @@ export class ActivitiesResolver {
     );
   }
 
+  @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
+  @Entity('Activity')
   @Mutation('removeActivity')
   remove(@Args('id') id: number) {
     return this.activitiesService.remove(id);
