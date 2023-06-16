@@ -38,7 +38,7 @@ export class ActivitiesResolver {
 
   @UseGuards(AuthGuard)
   @Query('activitiesByDate')
-  findByDate(@Args('date') date: Date, @Args('travelId') travelId: number ) {
+  findByDate(@Args('date') date: Date, @Args('travelId') travelId: number) {
     return this.activitiesService.findByDate(date, travelId);
   }
 

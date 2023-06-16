@@ -8,9 +8,7 @@ export class TimeScalar implements CustomScalar<string, string> {
   private field = 'time';
 
   private validateTime(value: string): boolean {
-    const timeRegex = new RegExp(
-        /^([0-9]{2}):([0-9]{2}):([0-9]{2})$/,
-    );
+    const timeRegex = new RegExp(/^([0-9]{2}):([0-9]{2}):([0-9]{2})$/);
     return timeRegex.test(value);
   }
 
