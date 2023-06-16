@@ -25,8 +25,9 @@ export class ActivitiesService {
     return this.activityRepository.findOneBy({ id });
   }
 
-  update(id: number, updateActivityInput: UpdateActivityInput) {
-    return `This action updates a #${id} activity`;
+  update(activity: Activity, updateActivityInput: UpdateActivityInput) {
+    activity = this.activityRepository.merge(activity, { ...updateActivityInput });
+    return this.activityRepository.save(activity);
   }
 
   async remove(id: number) {
