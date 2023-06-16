@@ -37,16 +37,14 @@ export class ActivitiesResolver {
     return this.dataloaderService.getByActivity().load(id);
   }
 
-    @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
+    @UseGuards(AuthGuard, ExistsGuard)
   @Entity('Activity')
-  @Property('travelId')
   @Mutation('updateActivity')
   update(
     @Args('updateActivityInput') updateActivityInput: UpdateActivityInput,
     @Context("updateActivity") activity: Activity,
   ) {
-    const updatedActivity = this.activitiesService.update(activity, updateActivityInput);
-    return updatedActivity;
+    return this.activitiesService.update(activity, updateActivityInput);
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)

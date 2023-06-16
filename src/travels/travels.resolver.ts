@@ -72,8 +72,7 @@ export class TravelsResolver {
     @Args('updateTravelInput') updateTravelInput: UpdateTravelInput,
     @Context('updateTravel') travel: Travel,
   ) {
-    const updatedTravel = this.travelsService.update(travel, updateTravelInput);
-    return updatedTravel;
+    return this.travelsService.update(travel, updateTravelInput);
   }
 
   // TODO refactor into another guard
