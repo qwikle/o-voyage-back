@@ -25,6 +25,7 @@ export class ActivitiesResolver {
     return this.activitiesService.create(createActivityInput);
   }
 
+  
   @Query('activities')
   findAll() {
     return this.activitiesService.findAll();
