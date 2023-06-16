@@ -6,9 +6,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Travel, User } from 'src/graphql';
 import { TimeScalar } from 'src/commons/scalars/time';
 import { Activity } from './entities/activity.entity';
+import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Travel, User, Activity])],
-  providers: [ActivitiesResolver, ActivitiesService,  DateScalar, TimeScalar],
+  providers: [
+    ActivitiesResolver, 
+    ActivitiesService,  
+    DateScalar, 
+    TimeScalar,
+    DataloaderService
+  ],
 })
 export class ActivitiesModule {}

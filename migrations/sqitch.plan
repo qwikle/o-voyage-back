@@ -7,3 +7,4 @@ lowercase_email 2023-06-12T08:13:23Z qwikle <qwikle.ziko@gmail.com> # change the
 has_attendees 2023-06-13T13:27:08Z qwikle <qwikle.ziko@gmail.com> # has_attendees relation
 rename_has_attendees 2023-06-14T12:14:51Z qwikle <qwikle.ziko@gmail.com> # rename relation to has_travelers
 activities 2023-06-14T13:25:21Z BuysschaertQuentin <quentin.buysschaert@gmail.com> # add activities
+trigger_function 2023-06-15T17:13:39Z qwikle <qwikle.ziko@gmail.com> # add trigger function

@@ -48,5 +48,5 @@ type Query {
 type Mutation {
   createActivity(createActivityInput: CreateActivityInput!): Activity!
   updateActivity(updateActivityInput: UpdateActivityInput!): Activity!
-  removeActivity(id: Int!): Activity
+  removeActivity(id: Int!): Boolean!
 }
