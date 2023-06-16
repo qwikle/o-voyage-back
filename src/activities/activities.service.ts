@@ -18,7 +18,7 @@ export class ActivitiesService {
   }
 
   findAll() {
-    return `This action returns all activities`;
+    return this.activityRepository.find();
   }
 
   findOne(id: number) {
