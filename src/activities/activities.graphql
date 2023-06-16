@@ -35,7 +35,7 @@ input UpdateActivityInput {
   name: String
   price: Int
   location: String
-  member: Int
+  members: Int
   time: String
   date: Date
 }
