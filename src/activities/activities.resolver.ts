@@ -36,6 +36,12 @@ export class ActivitiesResolver {
     return this.dataloaderService.getByActivity().load(id);
   }
 
+  @UseGuards(AuthGuard)
+  @Query('activitiesByDate')
+  findByDate(@Args('date') date: Date, @Args('travelId') travelId: number ) {
+    return this.activitiesService.findByDate(date, travelId);
+  }
+
   @UseGuards(AuthGuard, ExistsGuard)
   @Entity('Activity')
   @Mutation('updateActivity')

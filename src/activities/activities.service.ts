@@ -34,4 +34,8 @@ export class ActivitiesService {
     await this.activityRepository.delete(id)
     return true;
   }
+
+  findByDate(date: Date, travelId: number) {
+    return this.activityRepository.find({ where: { date, travelId } });
+  }
 }
