@@ -42,7 +42,7 @@ export class ActivitiesResolver {
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
-  @Entity('activity')
+  @Entity('Activity')
   @Mutation('removeActivity')
   remove(@Args('id') id: number) {
     return this.activitiesService.remove(id);
