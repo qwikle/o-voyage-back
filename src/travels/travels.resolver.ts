@@ -48,15 +48,16 @@ export class TravelsResolver {
     }
     return this.travelsService.create(createTravelInput);
   }
-
-  @UseGuards(AuthGuard)
+  // TODO UNCOMMENT THIS
+  //@UseGuards(AuthGuard)
   @Query('travels')
   findAll(@Context() { req }: OContext) {
-    const { auth } = req;
+    /*     const { auth } = req;
     if (auth.role === Role.ADMIN) {
       return this.travelsService.findAll();
     }
-    return this.travelsService.findAllByOrganizerId(auth.id);
+    return this.travelsService.findAllByOrganizerId(auth.id); */
+    return this.travelsService.findAll();
   }
 
   @Query('travel')
@@ -72,8 +73,7 @@ export class TravelsResolver {
     @Args('updateTravelInput') updateTravelInput: UpdateTravelInput,
     @Context('updateTravel') travel: Travel,
   ) {
-    const finalTravel = this.travelsService.update(travel, updateTravelInput);
-    return finalTravel;
+    return this.travelsService.update(travel, updateTravelInput);
   }
 
   // TODO refactor into another guard

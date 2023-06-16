@@ -8,6 +8,8 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { AllowedGuard } from 'src/commons/guards/allowed.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
+import { Property } from 'src/commons/guards/Property.decorator';
+import { Activity } from './entities/activity.entity';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
@@ -36,14 +38,14 @@ export class ActivitiesResolver {
     return this.dataloaderService.getByActivity().load(id);
   }
 
+    @UseGuards(AuthGuard, ExistsGuard)
+  @Entity('Activity')
   @Mutation('updateActivity')
   update(
     @Args('updateActivityInput') updateActivityInput: UpdateActivityInput,
+    @Context("updateActivity") activity: Activity,
   ) {
-    return this.activitiesService.update(
-      updateActivityInput.id,
-      updateActivityInput,
-    );
+    return this.activitiesService.update(activity, updateActivityInput);
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
