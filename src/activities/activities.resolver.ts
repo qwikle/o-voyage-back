@@ -8,7 +8,6 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { AllowedGuard } from 'src/commons/guards/allowed.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
-import { Property } from 'src/commons/guards/Property.decorator';
 import { Activity } from './entities/activity.entity';
 
 @Resolver('Activity')
@@ -27,7 +26,6 @@ export class ActivitiesResolver {
     return this.activitiesService.create(createActivityInput);
   }
 
-  
   @Query('activities')
   findAll() {
     return this.activitiesService.findAll();
@@ -38,12 +36,12 @@ export class ActivitiesResolver {
     return this.dataloaderService.getByActivity().load(id);
   }
 
-    @UseGuards(AuthGuard, ExistsGuard)
+  @UseGuards(AuthGuard, ExistsGuard)
   @Entity('Activity')
   @Mutation('updateActivity')
   update(
     @Args('updateActivityInput') updateActivityInput: UpdateActivityInput,
-    @Context("updateActivity") activity: Activity,
+    @Context('updateActivity') activity: Activity,
   ) {
     return this.activitiesService.update(activity, updateActivityInput);
   }
