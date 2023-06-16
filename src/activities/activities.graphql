@@ -1,4 +1,5 @@
 scalar Time
+scalar Date
 
 type Activity {
   "The id of the activity"
@@ -41,8 +42,9 @@ input UpdateActivityInput {
 }
 
 type Query {
-  activities: [Activity]!
+  activities: [Activity!]!
   activity(id: Int!): Activity
+  activitiesByDate(date: Date!, travelId: Int!): [Activity!]!
 }
 
 type Mutation {
