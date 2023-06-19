@@ -9,4 +9,9 @@ CREATE TABLE "categories" (
     "updated_at" TIMESTAMPTZ
 );
 
+INSERT INTO "categories" ("name") VALUES ('Repas');
+INSERT INTO "categories" ("name") VALUES ('Activité');
+INSERT INTO "categories" ("name") VALUES ('Trajet');
+INSERT INTO "categories" ("name") VALUES ('Hébergement');
+
 COMMIT;
