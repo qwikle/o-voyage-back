@@ -1,15 +1,15 @@
 type Category {
-  # Example field (placeholder)
-  exampleField: Int
+  id: Int!
+  name: String!
 }
 
 input CreateCategoryInput {
-  # Example field (placeholder)
-  exampleField: Int
+  name: String!
 }
 
 input UpdateCategoryInput {
   id: Int!
+  name: String!
 }
 
 type Query {
