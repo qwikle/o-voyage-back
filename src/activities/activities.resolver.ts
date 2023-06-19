@@ -19,7 +19,7 @@ export class ActivitiesResolver {
 
   @UseGuards(AuthGuard)
   @Mutation('createActivity')
-  async create(
+  create(
     @Args('createActivityInput') createActivityInput: CreateActivityInput,
   ) {
     // TODO check if user is organizer of the travel

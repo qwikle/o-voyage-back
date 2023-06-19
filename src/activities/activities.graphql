@@ -35,7 +35,6 @@ input CreateActivityInput {
 }
 
 input UpdateActivityInput {
-  id: Int!
   name: String
   price: Int
   location: String
@@ -53,6 +52,6 @@ type Query {
 
 type Mutation {
   createActivity(createActivityInput: CreateActivityInput!): Activity!
-  updateActivity(updateActivityInput: UpdateActivityInput!): Activity!
+  updateActivity(id: Int!, updateActivityInput: UpdateActivityInput!): Activity!
   removeActivity(id: Int!): Boolean!
 }

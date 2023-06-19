@@ -2,6 +2,6 @@
 
 BEGIN;
 
-DROP TABLE "categories";
+DROP TABLE "category";
 
 COMMIT;
