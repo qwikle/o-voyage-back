@@ -17,10 +17,14 @@ import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { Travel } from './entities/travel.entity';
 import { Role } from 'src/commons/guards/admin.guard';
-import { AllowedGuard } from 'src/commons/guards/allowed.guard';
+import {
+  AllowedGuard,
+  PermissionProperty,
+  TypeProperty,
+} from 'src/commons/guards/allowed.guard';
 import { Property } from 'src/commons/guards/Property.decorator';
-import { GraphQLError } from 'graphql';
 import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
+import { PermissionDeniedError } from 'src/commons/excepetions/denied';
 
 @Resolver('Travel')
 export class TravelsResolver {
@@ -38,12 +42,7 @@ export class TravelsResolver {
     const { auth } = req;
     if (auth.id !== createTravelInput.organizerId) {
       if (auth.role !== Role.ADMIN) {
-        throw new GraphQLError('Permission Denied', {
-          extensions: {
-            code: 'FORBIDDEN',
-            argumentName: 'organizerId',
-          },
-        });
+        throw new PermissionDeniedError();
       }
     }
     return this.travelsService.create(createTravelInput);
@@ -60,6 +59,9 @@ export class TravelsResolver {
     return this.travelsService.findAll();
   }
 
+  @UseGuards(AuthGuard, AllowedGuard)
+  @Entity('Travel')
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Query('travel')
   findOne(@Args('id') id: number) {
     return this.dataloaderService.getByTravel().load(id);
@@ -67,7 +69,7 @@ export class TravelsResolver {
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Travel')
-  @Property('organizerId')
+  @Property(PermissionProperty.ORGANIZER, TypeProperty.TRAVEL)
   @Mutation('updateTravel')
   async update(
     @Args('updateTravelInput') updateTravelInput: UpdateTravelInput,
@@ -79,7 +81,7 @@ export class TravelsResolver {
   // TODO refactor into another guard
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Travel')
-  @Property('organizerId')
+  @Property(PermissionProperty.ORGANIZER, TypeProperty.TRAVEL)
   @Mutation('removeTravel')
   remove(@Context('removeTravel') travel: Travel) {
     return this.travelsService.remove(travel.id);
