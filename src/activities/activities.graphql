@@ -18,6 +18,8 @@ type Activity {
   date: Date!
   "The travelId of the activity"
   travelId: Int!
+  "The categoryId of the activity"
+  categoryId: Int!
 }
 
 input CreateActivityInput {
@@ -28,16 +30,17 @@ input CreateActivityInput {
   time: String!
   date: Date!
   travelId: Int!
+  categoryId: Int!
 }
 
 input UpdateActivityInput {
-  id: Int!
   name: String
   price: Int
   location: String
   members: Int
   time: String
   date: Date
+  categoryId: Int
 }
 
 type Query {
@@ -48,6 +51,6 @@ type Query {
 
 type Mutation {
   createActivity(createActivityInput: CreateActivityInput!): Activity!
-  updateActivity(updateActivityInput: UpdateActivityInput!): Activity!
+  updateActivity(id: Int!, updateActivityInput: UpdateActivityInput!): Activity!
   removeActivity(id: Int!): Boolean!
 }

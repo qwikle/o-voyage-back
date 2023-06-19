@@ -22,4 +22,7 @@ export class CreateActivityInput {
 
   @Field()
   travelId: number;
+
+  @Field()
+  categoryId: number;
 }
