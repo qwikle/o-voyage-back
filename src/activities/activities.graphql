@@ -18,6 +18,8 @@ type Activity {
   date: Date! 
   "The travelId of the activity"
   travelId: Int!
+  "The categoryId of the activity"
+  categoryId: Int!
 }
 
 input CreateActivityInput {
@@ -29,6 +31,7 @@ input CreateActivityInput {
   time: String!
   date: Date!
   travelId: Int!
+  categoryId: Int!
 }
 
 input UpdateActivityInput {
@@ -39,6 +42,7 @@ input UpdateActivityInput {
   members: Int
   time: String
   date: Date
+  categoryId: Int
 }
 
 type Query {
