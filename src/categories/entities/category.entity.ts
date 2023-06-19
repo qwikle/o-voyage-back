@@ -1,6 +1,7 @@
 import { Activity } from 'src/graphql';
-import { Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, OneToMany, Entity } from 'typeorm';
 
+@Entity('category')
 export class Category {
     @PrimaryGeneratedColumn()
     id: number;
