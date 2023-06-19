@@ -30,6 +30,6 @@ export class Activity {
   @ManyToOne(() => Travel, (travel) => travel.id)
   travel: Travel;
 
-  @OneToOne(() => Activity, (activity) => activity.id)
+  @ManyToOne(() => Activity, (activity) => activity.id)
   category: Category;
 }

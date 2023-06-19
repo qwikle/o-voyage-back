@@ -12,7 +12,7 @@ CREATE TABLE "travel" (
     "to" "length_d" NOT NULL,
     "departure_date" TIMESTAMPTZ NOT NULL CHECK ("departure_date" >= NOW()),
     "arrival_date" TIMESTAMPTZ NOT NULL CHECK ("arrival_date" > "departure_date"),
-    "budget" INTEGER NOT NULL CHECK ("budget" > 0),
+    "budget" INTEGER NOT NULL CHECK ("budget" >= 0) DEFAULT 0,
     "number_of_attendees" INTEGER NOT NULL CHECK ("number_of_attendees" >= 1) DEFAULT 1,
     "organizer_id" INTEGER NOT NULL REFERENCES "user" ("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),

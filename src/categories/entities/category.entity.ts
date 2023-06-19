@@ -1,5 +1,5 @@
 import { Activity } from 'src/graphql';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 export class Category {
     @PrimaryGeneratedColumn()
@@ -8,7 +8,7 @@ export class Category {
     @Column()
     name: string;
 
-    @ManyToOne(() => Category, (category) => category.id)
-    activity: Activity;
+    @OneToMany(() => Category, (category) => category.id)
+    activities: Activity;
 
 }
