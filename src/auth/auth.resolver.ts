@@ -4,10 +4,13 @@ import { SignUpInput } from './dto/sign-up.Input';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SignInInput } from './dto/sign-in.input';
 import { Hash } from 'src/commons/bcrypt';
-import { GraphQLError } from 'graphql';
 import { OContext } from 'src/commons/types/context';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
+import { UniqueError } from 'src/commons/excepetions/unique';
+import { ConfirmationFieldError } from 'src/commons/excepetions/confirmation.field';
+import { InvalidCredentialsError } from 'src/commons/excepetions/invalid.crendatials';
+import { NotFoundError } from 'src/commons/excepetions/notFound';
 
 // TODO set roles in new folder
 @Resolver('Auth')
@@ -24,20 +27,10 @@ export class AuthResolver {
   ) {
     const user = await this.authService.findByEmail(createAuthInput.email);
     if (user) {
-      throw new GraphQLError('This email is allready used', {
-        extensions: {
-          code: 'BAD_USER_INPUT',
-          argumentName: 'email',
-        },
-      });
+      throw new UniqueError('email');
     }
     if (createAuthInput.password !== createAuthInput.confirmPassword) {
-      throw new GraphQLError('Password and confirm password are not the same', {
-        extensions: {
-          code: 'BAD_USER_INPUT',
-          argumentName: 'confirmPassword',
-        },
-      });
+      throw new ConfirmationFieldError('confirmPassword');
     }
     const createdUser = await this.authService.createUser(createAuthInput);
     const token = await this.authService.generateToken(createdUser, ctx.req.ip);
@@ -61,11 +54,7 @@ export class AuthResolver {
         };
       }
     }
-    throw new GraphQLError('Invalid credentials', {
-      extensions: {
-        code: 'UNAUTHENTICATED',
-      },
-    });
+    throw new InvalidCredentialsError();
   }
 
   @UseGuards(AuthGuard)
@@ -74,11 +63,7 @@ export class AuthResolver {
     const { auth } = ctx.req;
     const user = await this.authService.findById(auth.id);
     if (!user) {
-      throw new GraphQLError('User not found', {
-        extensions: {
-          code: 'NOT_FOUND',
-        },
-      });
+      throw new NotFoundError();
     }
     return this.authService.deleteAccount(user);
   }
@@ -92,26 +77,14 @@ export class AuthResolver {
       const tokenPayload = await this.authService.verifyRefreshToken(token);
       const user = await this.authService.findById(tokenPayload.id);
       if (!user || user.isBanned) {
-        throw new GraphQLError('User not found', {
-          extensions: {
-            code: 'NOT_FOUND',
-          },
-        });
+        throw new NotFoundError();
       }
       if (tokenPayload.ip !== ctx.req.ip) {
-        throw new GraphQLError('Invalid token', {
-          extensions: {
-            code: 'UNAUTHENTICATED',
-          },
-        });
+        throw new InvalidCredentialsError('Invalid token');
       }
       return this.authService.generateToken(user, ctx.req.ip);
     } catch (error) {
-      throw new GraphQLError('Invalid token', {
-        extensions: {
-          code: 'UNAUTHENTICATED',
-        },
-      });
+      throw new InvalidCredentialsError('Invalid token');
     }
   }
 }
