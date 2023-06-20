@@ -5,14 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
 
-
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
   ) {}
-
 
   create(createCategoryInput: CreateCategoryInput) {
     const category = this.categoryRepository.create(createCategoryInput);
@@ -28,7 +26,10 @@ export class CategoriesService {
   }
 
   update(category: Category, updateCategoryInput: UpdateCategoryInput) {
-    const updatedCategory = this.categoryRepository.merge(category, updateCategoryInput)
+    const updatedCategory = this.categoryRepository.merge(
+      category,
+      updateCategoryInput,
+    );
     return this.categoryRepository.save(updatedCategory);
   }
 

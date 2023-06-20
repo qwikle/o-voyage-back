@@ -3,13 +3,12 @@ import { Column, PrimaryGeneratedColumn, OneToMany, Entity } from 'typeorm';
 
 @Entity('category')
 export class Category {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @OneToMany(() => Category, (category) => category.id)
-    activities: Activity;
-
+  @OneToMany(() => Category, (category) => category.id)
+  activities: Activity;
 }

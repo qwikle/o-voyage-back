@@ -81,7 +81,7 @@ export class DataloaderService {
   public getTravelers(): DataLoader<number, any> {
     return this.travelersDataLoader;
   }
-  
+
   public getByCategory(): IDataLoader {
     return this.categoryDataLoader;
   }

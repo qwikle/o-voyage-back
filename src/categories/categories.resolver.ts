@@ -15,7 +15,8 @@ export class CategoriesResolver {
   @UseGuards(AuthGuard)
   @Mutation('createCategory')
   create(
-    @Args('createCategoryInput') createCategoryInput: CreateCategoryInput) {
+    @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
+  ) {
     return this.categoriesService.create(createCategoryInput);
   }
 
@@ -32,7 +33,10 @@ export class CategoriesResolver {
   @UseGuards(AuthGuard, ExistsGuard)
   @Entity('category')
   @Mutation('updateCategory')
-  update(@Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput, @Context('updateCategory') category: Category ) {
+  update(
+    @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
+    @Context('updateCategory') category: Category,
+  ) {
     return this.categoriesService.update(category, updateCategoryInput);
   }
 

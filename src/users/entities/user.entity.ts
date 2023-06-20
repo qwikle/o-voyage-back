@@ -6,7 +6,6 @@ import {
   BeforeUpdate,
   ManyToOne,
   AfterLoad,
-  OneToMany,
 } from 'typeorm';
 import { Hash } from 'src/commons/bcrypt';
 import { Role } from './role.entity';
