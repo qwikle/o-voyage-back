@@ -21,10 +21,10 @@ $$ LANGUAGE plpgsql;
 
 -- function to retrieves travels of a traveler
 
-CREATE FUNCTION get_travels(func_traveler_id integer[]) RETURNS SETOF "travel" AS $$
+CREATE FUNCTION get_travels(func_traveler_id integer[]) RETURNS TABLE ("id" INTEGER, "title" "length_d", "from" "length_d", "to" "length_d", "departure_date" TIMESTAMPTZ, "arrival_date" TIMESTAMPTZ, "budget" INTEGER, "number_of_travelers" INTEGER, "organizer_id" INTEGER, "created_at" TIMESTAMPTZ, "updated_at" TIMESTAMPTZ, "traveler_id" INTEGER) AS $$
 BEGIN
   RETURN QUERY 
-  SELECT "travel".* FROM "travel"
+  SELECT "travel".*, "has_travelers"."traveler_id" FROM "travel"
   JOIN "has_travelers" ON "has_travelers"."travel_id" = "travel"."id"
   WHERE "has_travelers"."traveler_id" = ANY(func_traveler_id);
 END;
