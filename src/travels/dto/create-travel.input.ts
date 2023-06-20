@@ -21,7 +21,7 @@ export class CreateTravelInput {
   budget: number;
 
   @Field()
-  numberOfAttendees: number;
+  numberOfTravelers: number;
 
   @Field()
   organizerId: number;

@@ -25,7 +25,7 @@ export class Travel {
   budget: number;
 
   @Column()
-  numberOfAttendees: number;
+  numberOfTravelers: number;
 
   @Column()
   organizerId: number;

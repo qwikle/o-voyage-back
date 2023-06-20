@@ -14,17 +14,19 @@ type Travel {
   arrivalDate: Date! # Date!
   "The budget of the travel"
   budget: Int!
-  "The numberOfAttendees of the travel"
-  numberOfAttendees: Int!
+  "The numberOfTravelers of the travel"
+  numberOfTravelers: Int!
   "relation user - travel"
   organizerId: Int!
   "organizer of the travel"
-  organizer: Attendee!
-  "Attendees of the travel"
-  attendees: [Attendee!]!
+  organizer: Traveler!
+  "travelers of the travel"
+  travelers: [Traveler!]!
+  "activities of the travel"
+  activities: [Activity!]!
 }
 
-type Attendee {
+type Traveler {
   id: Int!
   firstname: String!
   lastname: String!
@@ -38,7 +40,7 @@ input CreateTravelInput {
   departureDate: Date!
   arrivalDate: Date!
   budget: Int!
-  numberOfAttendees: Int!
+  numberOfTravelers: Int!
   organizerId: Int!
 }
 
@@ -49,7 +51,7 @@ input UpdateTravelInput {
   departureDate: Date
   arrivalDate: Date
   budget: Int
-  numberOfAttendees: Int
+  numberOfTravelers: Int
 }
 
 type Query {

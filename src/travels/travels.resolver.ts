@@ -64,7 +64,7 @@ export class TravelsResolver {
   @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Query('travel')
   findOne(@Args('id') id: number) {
-    return this.dataloaderService.getByTravel().load(id);
+    return this.travelsService.findOne(id);
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
@@ -78,7 +78,6 @@ export class TravelsResolver {
     return this.travelsService.update(travel, updateTravelInput);
   }
 
-  // TODO refactor into another guard
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Travel')
   @Property(PermissionProperty.ORGANIZER, TypeProperty.TRAVEL)
@@ -87,13 +86,18 @@ export class TravelsResolver {
     return this.travelsService.remove(travel.id);
   }
 
-  @ResolveField('attendees')
-  async getAttendees(@Parent() travel: Travel) {
-    return this.dataloaderService.getAttendees().load(travel.id);
+  @ResolveField('travelers')
+  async getTravelers(@Parent() travel: Travel) {
+    return this.dataloaderService.getTravelers().load(travel.id);
+  }
+
+  @ResolveField('activities')
+  async getActivities(@Parent() travel: Travel) {
+    return this.dataloaderService.getByActivity().many.load(travel.id);
   }
 
   @ResolveField('organizer')
   async getOrganizer(@Parent() travel: Travel) {
-    return this.dataloaderService.getByUser().load(travel.organizerId);
+    return this.dataloaderService.getByUser().one.load(travel.organizerId);
   }
 }
