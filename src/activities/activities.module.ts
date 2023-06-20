@@ -11,11 +11,11 @@ import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Travel, User, Activity])],
   providers: [
-    ActivitiesResolver, 
-    ActivitiesService,  
-    DateScalar, 
+    ActivitiesResolver,
+    ActivitiesService,
+    DateScalar,
     TimeScalar,
-    DataloaderService
+    DataloaderService,
   ],
 })
 export class ActivitiesModule {}

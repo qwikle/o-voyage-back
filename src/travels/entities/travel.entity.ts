@@ -32,6 +32,4 @@ export class Travel {
 
   @ManyToOne(() => User, (user) => user.id)
   organizer: User;
-
-  // TODO @ManyToMany(() => User, (user) => user.travels)
 }

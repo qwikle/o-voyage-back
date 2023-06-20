@@ -4,7 +4,7 @@ BEGIN;
 
 CREATE FUNCTION add_organizer_to_travel() RETURNS trigger AS $$
 BEGIN
-    INSERT INTO "has_travelers" ("travel_id", "attendee_id")
+    INSERT INTO "has_travelers" ("travel_id", "traveler_id")
     VALUES (NEW.id, NEW.organizer_id);
     RETURN NEW;
 END;

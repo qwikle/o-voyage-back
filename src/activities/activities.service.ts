@@ -18,7 +18,7 @@ export class ActivitiesService {
   }
 
   findAll() {
-    return `This action returns all activities`;
+    return this.activityRepository.find();
   }
 
   findOne(id: number) {
@@ -26,12 +26,18 @@ export class ActivitiesService {
   }
 
   update(activity: Activity, updateActivityInput: UpdateActivityInput) {
-    activity = this.activityRepository.merge(activity, { ...updateActivityInput });
+    activity = this.activityRepository.merge(activity, {
+      ...updateActivityInput,
+    });
     return this.activityRepository.save(activity);
   }
 
   async remove(id: number) {
-    await this.activityRepository.delete(id)
+    await this.activityRepository.delete(id);
     return true;
+  }
+
+  findByDate(date: Date, travelId: number) {
+    return this.activityRepository.find({ where: { date, travelId } });
   }
 }
