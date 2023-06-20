@@ -12,6 +12,7 @@ export class DataloaderService {
   private activityDataLoader: IDataLoader;
   private categoryDataLoader: IDataLoader;
   private travelersDataLoader: DataLoader<number, any>;
+  private travelsDataLoader: DataLoader<number, any>;
 
   constructor(
     private readonly dataSource: DataSource,
@@ -42,6 +43,8 @@ export class DataloaderService {
     };
     this.travelersDataLoader = this.generateTravelerSLoader();
 
+    this.travelsDataLoader = this.generateTravelsLoader();
+
     this.context.dataloader = this;
   }
 
@@ -62,15 +65,81 @@ export class DataloaderService {
     });
   };
 
+  /**
+   * @description: get travelers by traveler id
+   * @param ids
+   * @example: [1,2,3]
+   * @returns
+   * @memberof DataloaderService
+   * @returns {Promise<any[]>}
+   * @example: [{travel_id: 1, traveler_id: 1}, {travel_id: 1, traveler_id: 2}]
+   * @returns
+   * */
   private generateTravelerSLoader = () => {
     return new DataLoader(async (ids: number[]) => {
       const query = `SELECT * FROM get_travelers($1)`;
       const results = await this.dataSource.manager.query(query, [ids]);
-      return ids.map((id) =>
+      const mapped = ids.map((id) =>
         results.filter((result) => result.travel_id === id),
       );
+      return mapped.map((item) => this.convertKeysToCamelCase(item));
     });
   };
+
+  /**
+   *  @description: get travels by traveler id
+   * @param ids
+   * @example: [1,2,3]
+   * @returns
+   * @memberof DataloaderService
+   * @returns {Promise<any[]>}
+   */
+  private generateTravelsLoader = () => {
+    return new DataLoader(async (ids: number[]) => {
+      const query = `SELECT * FROM get_travels($1)`;
+      const results = await this.dataSource.manager.query(query, [ids]);
+      const mapped = ids.map((id) =>
+        results.filter((result) => result.traveler_id === id),
+      );
+      console.log(results);
+      console.log(mapped.map((item) => this.convertKeysToCamelCase(item)));
+      return mapped.map((item) => this.convertKeysToCamelCase(item));
+    });
+  };
+
+  /**
+   *
+   * @param obj
+   * @description Convert snake_case to camelCase
+   * @example { user_id: 1 } => { userId: 1 }
+   * @returns
+   */
+  private convertKeysToCamelCase(obj: any): any {
+    if (Array.isArray(obj)) {
+      return obj.map((item) => this.convertKeysToCamelCase(item));
+    } else if (typeof obj === 'object' && obj !== null) {
+      const convertedObj: any = {};
+
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          const camelCaseKey = key.replace(/_(\w)/g, (_, char) =>
+            char.toUpperCase(),
+          );
+          const value = obj[key];
+
+          if (value instanceof Date) {
+            convertedObj[camelCaseKey] = value;
+          } else {
+            convertedObj[camelCaseKey] = this.convertKeysToCamelCase(value);
+          }
+        }
+      }
+
+      return convertedObj;
+    }
+
+    return obj;
+  }
 
   public getByRole(): IDataLoader {
     return this.roleDataLoader;
@@ -94,5 +163,9 @@ export class DataloaderService {
 
   public getByCategory(): IDataLoader {
     return this.categoryDataLoader;
+  }
+
+  public getTravels(): DataLoader<number, any> {
+    return this.travelsDataLoader;
   }
 }
