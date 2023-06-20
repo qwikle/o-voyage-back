@@ -7,10 +7,10 @@ import { Hash } from 'src/commons/bcrypt';
 import { OContext } from 'src/commons/types/context';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
-import { UniqueError } from 'src/commons/excepetions/unique';
-import { ConfirmationFieldError } from 'src/commons/excepetions/confirmation.field';
-import { InvalidCredentialsError } from 'src/commons/excepetions/invalid.crendatials';
-import { NotFoundError } from 'src/commons/excepetions/notFound';
+import { UniqueError } from 'src/commons/exceptions/unique';
+import { ConfirmationFieldError } from 'src/commons/exceptions/confirmation.field';
+import { InvalidCredentialsError } from 'src/commons/exceptions/invalid.crendatials';
+import { NotFoundError } from 'src/commons/exceptions/notFound';
 
 // TODO set roles in new folder
 @Resolver('Auth')

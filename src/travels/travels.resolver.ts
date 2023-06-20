@@ -24,7 +24,7 @@ import {
 } from 'src/commons/guards/allowed.guard';
 import { Property } from 'src/commons/guards/Property.decorator';
 import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
-import { PermissionDeniedError } from 'src/commons/excepetions/denied';
+import { PermissionDeniedError } from 'src/commons/exceptions/denied';
 
 @Resolver('Travel')
 export class TravelsResolver {

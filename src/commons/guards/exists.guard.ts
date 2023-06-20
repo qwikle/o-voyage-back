@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { DataSource } from 'typeorm';
 import { Reflector } from '@nestjs/core';
-import { NotFoundError } from '../excepetions/notFound';
+import { NotFoundError } from '../exceptions/notFound';
 
 @Injectable()
 export class ExistsGuard implements CanActivate {

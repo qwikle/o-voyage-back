@@ -3,7 +3,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { Reflector } from '@nestjs/core';
 import { Role } from './admin.guard';
 import { DataSource } from 'typeorm';
-import { PermissionDeniedError } from '../excepetions/denied';
+import { PermissionDeniedError } from '../exceptions/denied';
 import { PropertyMetadata } from './Property.decorator';
 import { JwtPayload } from '../types/context';
 
