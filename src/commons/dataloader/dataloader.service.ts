@@ -101,8 +101,6 @@ export class DataloaderService {
       const mapped = ids.map((id) =>
         results.filter((result) => result.traveler_id === id),
       );
-      console.log(results);
-      console.log(mapped.map((item) => this.convertKeysToCamelCase(item)));
       return mapped.map((item) => this.convertKeysToCamelCase(item));
     });
   };
