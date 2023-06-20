@@ -27,6 +27,9 @@ export class Activity {
   @Column()
   travelId: number;
 
+  @Column()
+  categoryId: number;
+
   @ManyToOne(() => Travel, (travel) => travel.id)
   travel: Travel;
 
