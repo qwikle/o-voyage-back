@@ -7,12 +7,13 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { Category } from './entities/category.entity';
+import { AdminGuard } from 'src/commons/guards/admin.guard';
 
 @Resolver('category')
 export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   @Mutation('createCategory')
   create(
     @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
@@ -20,18 +21,20 @@ export class CategoriesResolver {
     return this.categoriesService.create(createCategoryInput);
   }
 
+  @UseGuards(AuthGuard)
   @Query('categories')
   findAll() {
     return this.categoriesService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Query('category')
   findOne(@Args('id') id: number) {
     return this.categoriesService.findOne(id);
   }
 
-  @UseGuards(AuthGuard, ExistsGuard)
-  @Entity('category')
+  @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
+  @Entity('Category')
   @Mutation('updateCategory')
   update(
     @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
@@ -40,7 +43,8 @@ export class CategoriesResolver {
     return this.categoriesService.update(category, updateCategoryInput);
   }
 
-  @UseGuards(AuthGuard, ExistsGuard)
+  @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
+  @Entity('Category')
   @Mutation('removeCategory')
   remove(@Args('id') id: number) {
     return this.categoriesService.remove(id);

@@ -16,7 +16,7 @@ import { OContext } from 'src/commons/types/context';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { Travel } from './entities/travel.entity';
-import { Role } from 'src/commons/guards/admin.guard';
+import { AdminGuard, Role } from 'src/commons/guards/admin.guard';
 import { AllowedGuard } from 'src/commons/guards/allowed.guard';
 import { Property } from 'src/commons/guards/Property.decorator';
 import { PermissionDeniedError } from 'src/commons/exceptions/denied';
@@ -45,15 +45,9 @@ export class TravelsResolver {
     }
     return this.travelsService.create(createTravelInput);
   }
-  // TODO UNCOMMENT THIS
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   @Query('travels')
-  findAll(@Context() { req }: OContext) {
-    /*     const { auth } = req;
-    if (auth.role === Role.ADMIN) {
-      return this.travelsService.findAll();
-    }
-    return this.travelsService.findAllByOrganizerId(auth.id); */
+  findAll() {
     return this.travelsService.findAll();
   }
 

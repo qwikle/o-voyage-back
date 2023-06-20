@@ -13,4 +13,5 @@ export interface DataLoaderInterface {
   getByActivity(): IDataLoader;
   getByCategory(): IDataLoader;
   getTravelers(): DataLoader<number, any>;
+  getTravels(): DataLoader<number, any>;
 }
