@@ -14,14 +14,12 @@ import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
-import {
-  AllowedGuard,
-  PermissionProperty,
-  TypeProperty,
-} from 'src/commons/guards/allowed.guard';
+import { AllowedGuard } from 'src/commons/guards/allowed.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { Activity } from './entities/activity.entity';
 import { Property } from 'src/commons/guards/Property.decorator';
+import { PermissionProperty, TypeProperty } from 'src/commons/types/guard';
+import { DataLoaderInterface } from 'src/commons/types/dataloader';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
@@ -66,12 +64,18 @@ export class ActivitiesResolver {
   }
 
   @ResolveField('travel')
-  getTravel(@Parent() activity: Activity) {
-    return this.dataloaderService.getByTravel().one.load(activity.travelId);
+  getTravel(
+    @Parent() activity: Activity,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getByTravel().one.load(activity.travelId);
   }
 
   @ResolveField('category')
-  getCategory(@Parent() activity: Activity) {
-    return this.dataloaderService.getByCategory().one.load(activity.categoryId);
+  getCategory(
+    @Parent() activity: Activity,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getByCategory().one.load(activity.categoryId);
   }
 }
