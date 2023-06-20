@@ -4,30 +4,50 @@ import { Any, DataSource } from 'typeorm';
 
 @Injectable()
 export class DataloaderService {
-  private roleDataLoader: DataLoader<number, any>;
-  private userDataLoader: DataLoader<number, any>;
-  private travelDataLoader: DataLoader<number, any>;
-  private activityDataLoader: DataLoader<number, any>;
-  private attendeesDataLoader: DataLoader<number, any>;
+  private roleDataLoader: IDataLoader;
+  private userDataLoader: IDataLoader;
+  private travelDataLoader: IDataLoader;
+  private activityDataLoader: IDataLoader;
+  private travelersDataLoader: DataLoader<number, any>;
 
   constructor(private readonly dataSource: DataSource) {
-    this.roleDataLoader = this.generateDataLoader('Role', 'id');
-    this.userDataLoader = this.generateDataLoader('User', 'id');
-    this.travelDataLoader = this.generateDataLoader('Travel', 'id');
-    this.activityDataLoader = this.generateDataLoader('Activity', 'id');
-    this.attendeesDataLoader = this.generateAttendeesLoader();
+    this.roleDataLoader = {
+      one: this.generateDataLoader('Role', 'id'),
+      many: this.generateDataLoader('Role', 'id', 'MANY'),
+    };
+    this.userDataLoader = {
+      one: this.generateDataLoader('User', 'id'),
+      many: this.generateDataLoader('User', 'id', 'MANY'),
+    };
+    this.travelDataLoader = {
+      one: this.generateDataLoader('Travel', 'id'),
+      many: this.generateDataLoader('Travel', 'id', 'MANY'),
+    };
+    this.activityDataLoader = {
+      one: this.generateDataLoader('Activity', 'id'),
+      many: this.generateDataLoader('Activity', 'id', 'MANY'),
+    };
+    this.travelersDataLoader = this.generateTravelerSLoader();
   }
 
-  private generateDataLoader = (entityName: string, key: any) => {
+  private generateDataLoader = (
+    entityName: string,
+    key: any,
+    type: 'ONE' | 'MANY' = 'ONE',
+  ) => {
     return new DataLoader(async (ids: number[]) => {
       const results = await this.dataSource.manager
         .getRepository(entityName)
         .find({ where: { [key]: Any(ids) } });
-      return ids.map((id) => results.find((result) => result[key] === id));
+      return ids.map((id) =>
+        type === 'ONE'
+          ? results.find((result) => result[key] === id)
+          : results.filter((result) => result[key] === id),
+      );
     });
   };
 
-  private generateAttendeesLoader = () => {
+  private generateTravelerSLoader = () => {
     return new DataLoader(async (ids: number[]) => {
       const query = `SELECT * FROM get_travelers($1)`;
       const results = await this.dataSource.manager.query(query, [ids]);
@@ -37,23 +57,28 @@ export class DataloaderService {
     });
   };
 
-  public getByRole(): DataLoader<number, any> {
+  public getByRole(): IDataLoader {
     return this.roleDataLoader;
   }
 
-  public getByUser(): DataLoader<number, any> {
+  public getByUser(): IDataLoader {
     return this.userDataLoader;
   }
 
-  public getByTravel(): DataLoader<number, any> {
+  public getByTravel(): IDataLoader {
     return this.travelDataLoader;
   }
 
-  public getByActivity(): DataLoader<number, any> {
+  public getByActivity(): IDataLoader {
     return this.activityDataLoader;
   }
 
-  public getAttendees(): DataLoader<number, any> {
-    return this.attendeesDataLoader;
+  public getTravelers(): DataLoader<number, any> {
+    return this.travelersDataLoader;
   }
+}
+
+interface IDataLoader {
+  one: DataLoader<number, any>;
+  many: DataLoader<number, any>;
 }

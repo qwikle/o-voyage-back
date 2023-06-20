@@ -40,7 +40,7 @@ export class ActivitiesResolver {
   // TODO REMOVE THIS FUNCTION
   @Query('activity')
   findOne(@Args('id') id: number) {
-    return this.dataloaderService.getByActivity().load(id);
+    return this.dataloaderService.getByActivity().one.load(id);
   }
 
   @UseGuards(AuthGuard)
