@@ -18,6 +18,7 @@ import { User } from './entities/user.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AdminGuard } from 'src/commons/guards/admin.guard';
 import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
+import { DataLoaderInterface } from 'src/commons/types/dataloader';
 
 @Resolver('User')
 export class UsersResolver {
@@ -57,8 +58,11 @@ export class UsersResolver {
 
   @UseGuards(AuthGuard, AdminGuard)
   @Query('user')
-  findOne(@Args('id') id: number) {
-    return this.dataLoaderService.getByUser().one.load(id);
+  findOne(
+    @Args('id') id: number,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getByUser().one.load(id);
   }
 
   @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
@@ -80,7 +84,10 @@ export class UsersResolver {
 
   @UseGuards(AuthGuard, AdminGuard)
   @ResolveField('role')
-  role(@Parent() user: User) {
-    return this.dataLoaderService.getByRole().one.load(user.roleId);
+  role(
+    @Parent() user: User,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getByRole().one.load(user.roleId);
   }
 }

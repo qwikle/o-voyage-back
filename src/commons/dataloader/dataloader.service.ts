@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { Any, DataSource } from 'typeorm';
+import { CONTEXT } from '@nestjs/graphql';
+import { IDataLoader } from '../types/dataloader';
 
 @Injectable()
 export class DataloaderService {
@@ -11,7 +13,10 @@ export class DataloaderService {
   private categoryDataLoader: IDataLoader;
   private travelersDataLoader: DataLoader<number, any>;
 
-  constructor(private readonly dataSource: DataSource) {
+  constructor(
+    private readonly dataSource: DataSource,
+    @Inject(CONTEXT) private readonly context: any,
+  ) {
     this.roleDataLoader = {
       one: this.generateDataLoader('Role', 'id'),
       many: this.generateDataLoader('Role', 'id', 'MANY'),
@@ -27,12 +32,17 @@ export class DataloaderService {
     this.activityDataLoader = {
       one: this.generateDataLoader('Activity', 'id'),
       many: this.generateDataLoader('Activity', 'id', 'MANY'),
+      by: {
+        manyTravelId: this.generateDataLoader('Activity', 'travelId', 'MANY'),
+      },
     };
     this.categoryDataLoader = {
       one: this.generateDataLoader('Category', 'id'),
       many: this.generateDataLoader('Category', 'id', 'MANY'),
     };
     this.travelersDataLoader = this.generateTravelerSLoader();
+
+    this.context.dataloader = this;
   }
 
   private generateDataLoader = (
@@ -85,9 +95,4 @@ export class DataloaderService {
   public getByCategory(): IDataLoader {
     return this.categoryDataLoader;
   }
-}
-
-interface IDataLoader {
-  one: DataLoader<number, any>;
-  many: DataLoader<number, any>;
 }

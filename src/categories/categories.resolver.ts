@@ -40,6 +40,7 @@ export class CategoriesResolver {
     return this.categoriesService.update(category, updateCategoryInput);
   }
 
+  @UseGuards(AuthGuard, ExistsGuard)
   @Mutation('removeCategory')
   remove(@Args('id') id: number) {
     return this.categoriesService.remove(id);
