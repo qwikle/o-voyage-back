@@ -34,7 +34,7 @@ export class CategoriesResolver {
   }
 
   @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
-  @Entity('category')
+  @Entity('Category')
   @Mutation('updateCategory')
   update(
     @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
@@ -44,6 +44,7 @@ export class CategoriesResolver {
   }
 
   @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
+  @Entity('Category')
   @Mutation('removeCategory')
   remove(@Args('id') id: number) {
     return this.categoriesService.remove(id);
