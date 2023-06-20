@@ -20,6 +20,10 @@ type Activity {
   travelId: Int!
   "The categoryId of the activity"
   categoryId: Int!
+  "the travel of the activity"
+  travel: Travel!
+  "the category of the activity"
+  category: Category!
 }
 
 input CreateActivityInput {
@@ -44,9 +48,7 @@ input UpdateActivityInput {
 }
 
 type Query {
-  activities: [Activity!]!
-  activity(id: Int!): Activity
-  activitiesByDate(date: Date!, travelId: Int!): [Activity!]!
+  activitiesByDate(date: Date!, id: Int!): [Activity!]!
 }
 
 type Mutation {

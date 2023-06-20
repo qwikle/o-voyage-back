@@ -8,6 +8,7 @@ export class DataloaderService {
   private userDataLoader: IDataLoader;
   private travelDataLoader: IDataLoader;
   private activityDataLoader: IDataLoader;
+  private categoryDataLoader: IDataLoader;
   private travelersDataLoader: DataLoader<number, any>;
 
   constructor(private readonly dataSource: DataSource) {
@@ -26,6 +27,10 @@ export class DataloaderService {
     this.activityDataLoader = {
       one: this.generateDataLoader('Activity', 'id'),
       many: this.generateDataLoader('Activity', 'id', 'MANY'),
+    };
+    this.categoryDataLoader = {
+      one: this.generateDataLoader('Category', 'id'),
+      many: this.generateDataLoader('Category', 'id', 'MANY'),
     };
     this.travelersDataLoader = this.generateTravelerSLoader();
   }
@@ -75,6 +80,10 @@ export class DataloaderService {
 
   public getTravelers(): DataLoader<number, any> {
     return this.travelersDataLoader;
+  }
+  
+  public getByCategory(): IDataLoader {
+    return this.categoryDataLoader;
   }
 }
 
