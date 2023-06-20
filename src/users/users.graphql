@@ -15,6 +15,8 @@ type User {
   isBanned: Boolean!
   "The role of the user"
   role: Role!
+  "the travels of the user"
+  travels: [Travel!]!
 }
 
 "A Role object containing all the information about a role of a user"
