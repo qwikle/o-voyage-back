@@ -29,8 +29,7 @@ export class DataloaderService {
 
   private generateAttendeesLoader = () => {
     return new DataLoader(async (ids: number[]) => {
-      const query = `SELECT * FROM "user" INNER JOIN "has_travelers"
-      ON "user"."id" = "has_travelers"."attendee_id" WHERE "has_travelers"."travel_id" = ANY($1)`;
+      const query = `SELECT * FROM get_travelers($1)`;
       const results = await this.dataSource.manager.query(query, [ids]);
       return ids.map((id) =>
         results.filter((result) => result.travel_id === id),

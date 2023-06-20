@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { GraphQLError } from 'graphql';
 import { DataSource } from 'typeorm';
 import { Reflector } from '@nestjs/core';
+import { NotFoundError } from '../exceptions/notFound';
 
 @Injectable()
 export class ExistsGuard implements CanActivate {
@@ -19,12 +19,7 @@ export class ExistsGuard implements CanActivate {
     const entityRepository = this.dataSource.getRepository(entity);
     const entityInstance = await entityRepository.findOneBy({ id });
     if (!entityInstance) {
-      throw new GraphQLError(`${entity} not found`, {
-        extensions: {
-          code: 'NOT_FOUND',
-          argumentName: 'id',
-        },
-      });
+      throw new NotFoundError(`${entity} not found`);
     }
     ctx.getContext()[fieldName] = entityInstance;
     return true;

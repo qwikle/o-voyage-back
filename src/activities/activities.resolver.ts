@@ -6,9 +6,14 @@ import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
-import { AllowedGuard } from 'src/commons/guards/allowed.guard';
+import {
+  AllowedGuard,
+  PermissionProperty,
+  TypeProperty,
+} from 'src/commons/guards/allowed.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { Activity } from './entities/activity.entity';
+import { Property } from 'src/commons/guards/Property.decorator';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
@@ -26,11 +31,13 @@ export class ActivitiesResolver {
     return this.activitiesService.create(createActivityInput);
   }
 
+  // TODO REMOVE THIS FUNCTION
   @Query('activities')
   findAll() {
     return this.activitiesService.findAll();
   }
 
+  // TODO REMOVE THIS FUNCTION
   @Query('activity')
   findOne(@Args('id') id: number) {
     return this.dataloaderService.getByActivity().load(id);
@@ -42,8 +49,9 @@ export class ActivitiesResolver {
     return this.activitiesService.findByDate(date, travelId);
   }
 
-  @UseGuards(AuthGuard, ExistsGuard)
+  @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Activity')
+  @Property(PermissionProperty.ORGANIZER, TypeProperty.ACTIVITY)
   @Mutation('updateActivity')
   update(
     @Args('updateActivityInput') updateActivityInput: UpdateActivityInput,
@@ -54,6 +62,7 @@ export class ActivitiesResolver {
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Activity')
+  @Property(PermissionProperty.ORGANIZER, TypeProperty.ACTIVITY)
   @Mutation('removeActivity')
   remove(@Args('id') id: number) {
     return this.activitiesService.remove(id);
