@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { GraphQLError } from 'graphql';
+import { PermissionDeniedError } from '../exceptions/denied';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -8,11 +8,7 @@ export class AdminGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const { auth } = ctx.getContext().req;
     if (auth.role !== Role.ADMIN) {
-      throw new GraphQLError('Permission Denied', {
-        extensions: {
-          code: 'UNAUTHORIZED',
-        },
-      });
+      throw new PermissionDeniedError();
     }
     return true;
   }
