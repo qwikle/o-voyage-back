@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context, ResolveField, Parent } from '@nestjs/graphql';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityInput } from './dto/create-activity.input';
 import { UpdateActivityInput } from './dto/update-activity.input';
@@ -31,22 +31,11 @@ export class ActivitiesResolver {
     return this.activitiesService.create(createActivityInput);
   }
 
-  // TODO REMOVE THIS FUNCTION
-  @Query('activities')
-  findAll() {
-    return this.activitiesService.findAll();
-  }
-
-  // TODO REMOVE THIS FUNCTION
-  @Query('activity')
-  findOne(@Args('id') id: number) {
-    return this.dataloaderService.getByActivity().one.load(id);
-  }
-
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AllowedGuard)
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Query('activitiesByDate')
-  findByDate(@Args('date') date: Date, @Args('travelId') travelId: number) {
-    return this.activitiesService.findByDate(date, travelId);
+  findByDate(@Args('date') date: Date, @Args('id') id: number) {
+    return this.activitiesService.findByDate(date, id);
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
@@ -66,5 +55,15 @@ export class ActivitiesResolver {
   @Mutation('removeActivity')
   remove(@Args('id') id: number) {
     return this.activitiesService.remove(id);
+  }
+
+  @ResolveField('travel')
+  getTravel(@Parent() activity: Activity) {
+    return this.dataloaderService.getByTravel().one.load(activity.travelId);
+  }
+
+  @ResolveField('category')
+  getCategory(@Parent() activity: Activity) {
+    return this.dataloaderService.getByCategory().one.load(activity.categoryId);
   }
 }

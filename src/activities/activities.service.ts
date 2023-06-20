@@ -17,14 +17,6 @@ export class ActivitiesService {
     return this.activityRepository.save(activity);
   }
 
-  findAll() {
-    return this.activityRepository.find();
-  }
-
-  findOne(id: number) {
-    return this.activityRepository.findOneBy({ id });
-  }
-
   update(activity: Activity, updateActivityInput: UpdateActivityInput) {
     activity = this.activityRepository.merge(activity, {
       ...updateActivityInput,
