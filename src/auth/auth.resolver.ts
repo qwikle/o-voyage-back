@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Context } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { SignUpInput } from './dto/sign-up.Input';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,5 +86,16 @@ export class AuthResolver {
     } catch (error) {
       throw new InvalidCredentialsError('Invalid token');
     }
+  }
+
+  @UseGuards(AuthGuard)
+  @Query('me')
+  async me(@Context() ctx: OContext) {
+    const { auth } = ctx.req;
+    const user = await this.authService.findById(auth.id);
+    if (!user) {
+      throw new NotFoundError();
+    }
+    return user;
   }
 }

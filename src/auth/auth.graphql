@@ -39,6 +39,11 @@ input SignInInput {
   password: String!
 }
 
+type Query {
+  "Get the current user"
+  me: User!
+}
+
 type Mutation {
   signUp(signUpInput: SignUpInput!): Auth!
   signIn(signInInput: SignInInput!): Auth!

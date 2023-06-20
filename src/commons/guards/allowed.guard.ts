@@ -4,8 +4,13 @@ import { Reflector } from '@nestjs/core';
 import { Role } from './admin.guard';
 import { DataSource } from 'typeorm';
 import { PermissionDeniedError } from '../exceptions/denied';
-import { PropertyMetadata } from './Property.decorator';
 import { JwtPayload } from '../types/context';
+import {
+  PermissionProperty,
+  PropertyMetadata,
+  TravelIdInterface,
+  TypeProperty,
+} from '../types/guard';
 
 @Injectable()
 export class AllowedGuard implements CanActivate {
@@ -86,20 +91,4 @@ export class AllowedGuard implements CanActivate {
       throw new PermissionDeniedError();
     }
   }
-}
-
-interface TravelIdInterface {
-  travelId: number;
-  organizerId: number;
-}
-
-export enum TypeProperty {
-  TRAVEL = 'Travel',
-  ACTIVITY = 'Activity',
-  PICTURE = 'Picture',
-}
-
-export enum PermissionProperty {
-  TRAVELER = 'TRAVELER',
-  ORGANIZER = 'ORGANIZER',
 }

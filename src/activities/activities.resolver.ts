@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Context,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityInput } from './dto/create-activity.input';
 import { UpdateActivityInput } from './dto/update-activity.input';
@@ -6,14 +14,12 @@ import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
-import {
-  AllowedGuard,
-  PermissionProperty,
-  TypeProperty,
-} from 'src/commons/guards/allowed.guard';
+import { AllowedGuard } from 'src/commons/guards/allowed.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
 import { Activity } from './entities/activity.entity';
 import { Property } from 'src/commons/guards/Property.decorator';
+import { PermissionProperty, TypeProperty } from 'src/commons/types/guard';
+import { DataLoaderInterface } from 'src/commons/types/dataloader';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
@@ -31,22 +37,11 @@ export class ActivitiesResolver {
     return this.activitiesService.create(createActivityInput);
   }
 
-  // TODO REMOVE THIS FUNCTION
-  @Query('activities')
-  findAll() {
-    return this.activitiesService.findAll();
-  }
-
-  // TODO REMOVE THIS FUNCTION
-  @Query('activity')
-  findOne(@Args('id') id: number) {
-    return this.dataloaderService.getByActivity().one.load(id);
-  }
-
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AllowedGuard)
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Query('activitiesByDate')
-  findByDate(@Args('date') date: Date, @Args('travelId') travelId: number) {
-    return this.activitiesService.findByDate(date, travelId);
+  findByDate(@Args('date') date: Date, @Args('id') id: number) {
+    return this.activitiesService.findByDate(date, id);
   }
 
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
@@ -66,5 +61,21 @@ export class ActivitiesResolver {
   @Mutation('removeActivity')
   remove(@Args('id') id: number) {
     return this.activitiesService.remove(id);
+  }
+
+  @ResolveField('travel')
+  getTravel(
+    @Parent() activity: Activity,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getByTravel().one.load(activity.travelId);
+  }
+
+  @ResolveField('category')
+  getCategory(
+    @Parent() activity: Activity,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getByCategory().one.load(activity.categoryId);
   }
 }

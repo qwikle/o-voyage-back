@@ -1,6 +1,6 @@
 import { Category } from 'src/categories/entities/category.entity';
 import { Travel } from 'src/travels/entities/travel.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 @Entity('activity')
 export class Activity {
   @PrimaryGeneratedColumn()

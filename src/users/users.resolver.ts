@@ -10,7 +10,6 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { GraphQLError } from 'graphql';
 import { UseGuards } from '@nestjs/common';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
 import { Entity } from 'src/commons/guards/Entity.decorator';
@@ -18,6 +17,9 @@ import { User } from './entities/user.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AdminGuard } from 'src/commons/guards/admin.guard';
 import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
+import { DataLoaderInterface } from 'src/commons/types/dataloader';
+import { UniqueError } from 'src/commons/exceptions/unique';
+import { ConfirmationFieldError } from 'src/commons/exceptions/confirmation.field';
 
 @Resolver('User')
 export class UsersResolver {
@@ -31,20 +33,10 @@ export class UsersResolver {
   async create(@Args('createUserInput') createUserInput: CreateUserInput) {
     const user = await this.usersService.findByEmail(createUserInput.email);
     if (user) {
-      throw new GraphQLError('This email is allready used', {
-        extensions: {
-          code: 'BAD_USER_INPUT',
-          argumentName: 'email',
-        },
-      });
+      throw new UniqueError('email');
     }
     if (createUserInput.password !== createUserInput.confirmPassword) {
-      throw new GraphQLError('Password and confirm password are not the same', {
-        extensions: {
-          code: 'BAD_USER_INPUT',
-          argumentName: 'confirmPassword',
-        },
-      });
+      throw new ConfirmationFieldError('confirmPassword');
     }
     return this.usersService.createUser(createUserInput);
   }
@@ -57,8 +49,11 @@ export class UsersResolver {
 
   @UseGuards(AuthGuard, AdminGuard)
   @Query('user')
-  findOne(@Args('id') id: number) {
-    return this.dataLoaderService.getByUser().one.load(id);
+  findOne(
+    @Args('id') id: number,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getByUser().one.load(id);
   }
 
   @UseGuards(AuthGuard, AdminGuard, ExistsGuard)
@@ -78,9 +73,19 @@ export class UsersResolver {
     return this.usersService.remove(id);
   }
 
-  @UseGuards(AuthGuard, AdminGuard)
   @ResolveField('role')
-  role(@Parent() user: User) {
-    return this.dataLoaderService.getByRole().one.load(user.roleId);
+  role(
+    @Parent() user: User,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getByRole().one.load(user.roleId);
+  }
+
+  @ResolveField('travels')
+  travels(
+    @Parent() user: User,
+    @Context('dataloader') dataloader: DataLoaderInterface,
+  ) {
+    return dataloader.getTravels().load(user.id);
   }
 }
