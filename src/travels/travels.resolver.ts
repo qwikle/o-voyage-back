@@ -45,7 +45,7 @@ export class TravelsResolver {
     }
     return this.travelsService.create(createTravelInput);
   }
-  @UseGuards(AuthGuard, AdminGuard)
+  //@UseGuards(AuthGuard, AdminGuard)
   @Query('travels')
   findAll() {
     return this.travelsService.findAll();
