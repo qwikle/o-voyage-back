@@ -51,9 +51,9 @@ export class TravelsResolver {
     return this.travelsService.findAll();
   }
 
-  //@UseGuards(AuthGuard, AllowedGuard)
-  //@Entity('Travel')
-  //@Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
+  @UseGuards(AuthGuard, AllowedGuard)
+  @Entity('Travel')
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Query('travel')
   findOne(@Args('id') id: number) {
     return this.travelsService.findOne(id);
