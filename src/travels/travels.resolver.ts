@@ -88,6 +88,20 @@ export class TravelsResolver {
       return travel;
   }
 
+  @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
+  @Entity('Travel')
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
+  @Mutation('removeTravelerFromTravel')
+  async removeTravelerFromTravel(@Args('travelerId') travelerId: number, @Context('removeTravelerFromTravel') travel: Travel, @Context() {req}: OContext){
+    const {auth} = req;
+    if(auth.id !== travel.organizerId){
+      if(travelerId !== auth.id){
+        throw new PermissionDeniedError();
+      }
+    }
+    return this.travelsService.removeTravelerFromTravel(travelerId, travel.id)
+  }
+
 
   @ResolveField('travelers')
   async getTravelers(
