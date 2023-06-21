@@ -78,6 +78,17 @@ export class TravelsResolver {
     return this.travelsService.remove(travel.id);
   }
 
+  @UseGuards(AuthGuard, ExistsGuard)
+  @Entity('Travel')
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
+  @Mutation('addTravelerToTravel')
+  async addTravelerToTravel(@Context('addTravelerToTravel') travel: Travel, @Context() {req}: OContext){
+    const {auth} = req;
+    await this.travelsService.addTravelersToTravel(auth.id, travel.id)
+      return travel;
+  }
+
+
   @ResolveField('travelers')
   async getTravelers(
     @Parent() travel: Travel,
