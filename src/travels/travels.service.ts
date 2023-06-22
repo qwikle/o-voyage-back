@@ -58,4 +58,11 @@ export class TravelsService {
     const link = `invitation?travelId=${travel.id}&token=${invitationToken}`;
     return link;
   }
+  async removeTravelerFromTravel(travelerId: number, travelId: number){
+    await this.datasource.query(`
+    DELETE FROM "has_travelers"
+    WHERE "traveler_id" = $1 AND "travel_id" = $2
+    `, [travelerId, travelId])
+    return true;
+  }
 }

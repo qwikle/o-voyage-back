@@ -64,6 +64,7 @@ type Query {
 type Mutation {
   createTravel(createTravelInput: CreateTravelInput!): Travel!
   addTravelerToTravel(id: Int!): Travel!
+  removeTravelerFromTravel(id: Int!, travelerId: Int!): Boolean!
   updateTravel(id: Int!, updateTravelInput: UpdateTravelInput!): Travel!
   removeTravel(id: Int!): Boolean!
 }
