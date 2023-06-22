@@ -59,6 +59,7 @@ input UpdateTravelInput {
 type Query {
   travels: [Travel]!
   travel(id: Int!): Travel
+  getTravelInvitationLink(travelId: Int!): String!
 }
 
 type Mutation {

@@ -4,13 +4,14 @@ import { UpdateTravelInput } from './dto/update-travel.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Travel } from './entities/travel.entity';
 import { DataSource, Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class TravelsService {
   constructor(
     @InjectRepository(Travel)
     private travelRepository: Repository<Travel>,
-    private datasource: DataSource
+    private datasource: DataSource,
   ) {}
 
   async create(createTravelInput: CreateTravelInput) {
@@ -36,12 +37,21 @@ export class TravelsService {
     return true;
   }
 
-  addTravelersToTravel(travelerId: number, travelId: number){
-    return this.datasource.query(`
+  addTravelersToTravel(travelerId: number, travelId: number) {
+    return this.datasource.query(
+      `
     INSERT INTO "has_travelers"
     ("traveler_id", "travel_id") 
     VALUES ($1, $2)
     RETURNING *
-    `, [travelerId, travelId])
+    `,
+      [travelerId, travelId],
+    );
+  }
+
+  async generateInvitationLink(travel: Travel) {
+    const invitationToken = await bcrypt.encrypt(JSON.stringify({id : travel.id}));
+    const link = `invitation?travelId=${travel.id}&token=${invitationToken}`;
+    return link;
   }
 }
