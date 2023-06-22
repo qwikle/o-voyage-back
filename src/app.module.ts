@@ -28,6 +28,7 @@ import { CategoriesModule } from './categories/categories.module';
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useFactory: async () => ({
+        fieldResolverEnhancers: ['guards'],
         introspection: true,
         path: '/',
         playground: false,
@@ -59,7 +60,7 @@ import { CategoriesModule } from './categories/categories.module';
     JwtModule.register({
       global: true,
       secret: configuration().jwtSecret,
-      signOptions: { expiresIn: '15m' },
+      signOptions: { expiresIn: configuration().jwtTime },
     }),
     AuthModule,
     TravelsModule,
