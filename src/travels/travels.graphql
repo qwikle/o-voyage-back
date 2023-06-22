@@ -25,7 +25,7 @@ type Travel {
   "activities of the travel"
   activities: [Activity!]!
   "link to join the travel"
-  invitationLink: String!
+  invitationLink: String
 }
 
 type Traveler {
@@ -59,7 +59,6 @@ input UpdateTravelInput {
 type Query {
   travels: [Travel]!
   travel(id: Int!): Travel
-  getTravelInvitationLink(travelId: Int!): String!
 }
 
 type Mutation {

@@ -59,13 +59,6 @@ export class TravelsResolver {
     return this.travelsService.findOne(id);
   }
 
-  @Query('getTravelInvitationLink')
-  async getTravelInvitationLink(@Args('travelId') travelId: number): Promise<string> {
-    const travel = await this.travelsService.findOne(travelId)
-    const invitationLink = this.travelsService.generateInvitationLink(travel);
-    return invitationLink;
-  }
-
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Travel')
   @Property(PermissionProperty.ORGANIZER, TypeProperty.TRAVEL)
@@ -89,12 +82,14 @@ export class TravelsResolver {
   @Entity('Travel')
   @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Mutation('addTravelerToTravel')
-  async addTravelerToTravel(@Context('addTravelerToTravel') travel: Travel, @Context() {req}: OContext){
-    const {auth} = req;
-    await this.travelsService.addTravelersToTravel(auth.id, travel.id)
-      return travel;
+  async addTravelerToTravel(
+    @Context('addTravelerToTravel') travel: Travel,
+    @Context() { req }: OContext,
+  ) {
+    const { auth } = req;
+    await this.travelsService.addTravelersToTravel(auth.id, travel.id);
+    return travel;
   }
-
 
   @ResolveField('travelers')
   async getTravelers(
@@ -120,9 +115,15 @@ export class TravelsResolver {
     return dataloader.getByUser().one.load(travel.organizerId);
   }
 
+  @UseGuards(AuthGuard)
   @ResolveField('invitationLink')
-  getInvitationLink(@Parent() travel: Travel): Promise<string> { 
+  getInvitationLink(
+    @Parent() travel: Travel,
+    @Context('req') {auth},
+  ): Promise<string> {
+    if(auth.id !== travel.organizerId){
+      return null;
+    }
     return this.travelsService.generateInvitationLink(travel);
   }
 }
-

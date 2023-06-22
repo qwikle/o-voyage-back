@@ -1,4 +1,5 @@
 export default () => ({
+  jwtTime: process.env.JWT_TIME || '15m',
   jwtSecret: process.env.JWT_SECRET,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
   port: parseInt(process.env.PORT, 10) || 3000,
