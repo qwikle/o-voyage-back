@@ -96,15 +96,19 @@ export class TravelsResolver {
   @Entity('Travel')
   @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Mutation('removeTravelerFromTravel')
-  async removeTravelerFromTravel(@Args('travelerId') travelerId: number, @Context('removeTravelerFromTravel') travel: Travel, @Context() {req}: OContext){
-    const {auth} = req;
-    if(auth.id !== travel.organizerId){
-      if(travelerId !== auth.id || travelerId === travel.organizerId){
+  async removeTravelerFromTravel(
+    @Args('travelerId') travelerId: number,
+    @Context('removeTravelerFromTravel') travel: Travel,
+    @Context() { req }: OContext,
+  ) {
+    const { auth } = req;
+    if (auth.id !== travel.organizerId) {
+      if (travelerId !== auth.id || travelerId === travel.organizerId) {
         throw new PermissionDeniedError();
       }
     }
 
-    return this.travelsService.removeTravelerFromTravel(travelerId, travel.id)
+    return this.travelsService.removeTravelerFromTravel(travelerId, travel.id);
   }
   @ResolveField('travelers')
   async getTravelers(
@@ -134,9 +138,9 @@ export class TravelsResolver {
   @ResolveField('invitationLink')
   getInvitationLink(
     @Parent() travel: Travel,
-    @Context('req') {auth},
+    @Context('req') { auth },
   ): Promise<string> {
-    if(auth.id !== travel.organizerId){
+    if (auth.id !== travel.organizerId) {
       return null;
     }
     return this.travelsService.generateInvitationLink(travel);

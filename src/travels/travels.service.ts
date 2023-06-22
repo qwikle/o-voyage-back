@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Travel } from './entities/travel.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Hash } from 'src/commons/bcrypt';
-import * as ms from "ms";
+import * as ms from 'ms';
 
 @Injectable()
 export class TravelsService {
@@ -53,16 +53,19 @@ export class TravelsService {
 
   async generateInvitationLink(travel: Travel) {
     const invitationToken = await this.hash.encrypt(
-      JSON.stringify({ id: travel.id, exp: ms('8h')}),
+      JSON.stringify({ id: travel.id, exp: ms('8h') }),
     );
     const link = `invitation?travelId=${travel.id}&token=${invitationToken}`;
     return link;
   }
-  async removeTravelerFromTravel(travelerId: number, travelId: number){
-    await this.datasource.query(`
+  async removeTravelerFromTravel(travelerId: number, travelId: number) {
+    await this.datasource.query(
+      `
     DELETE FROM "has_travelers"
     WHERE "traveler_id" = $1 AND "travel_id" = $2
-    `, [travelerId, travelId])
+    `,
+      [travelerId, travelId],
+    );
     return true;
   }
 }
