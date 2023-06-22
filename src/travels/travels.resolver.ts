@@ -23,6 +23,7 @@ import { PermissionDeniedError } from 'src/commons/exceptions/denied';
 import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 import { PermissionProperty, TypeProperty } from 'src/commons/types/guard';
 import { DataLoaderInterface } from 'src/commons/types/dataloader';
+import * as bcrypt from 'bcrypt';
 
 @Resolver('Travel')
 export class TravelsResolver {
@@ -112,4 +113,12 @@ export class TravelsResolver {
   ) {
     return dataloader.getByUser().one.load(travel.organizerId);
   }
+
+  @ResolveField('invitationLink')
+  async getInvitationLink(@Parent() travel: Travel): Promise<string> { 
+    const invitationToken = await bcrypt.hash(travel.id.toString(), 10);
+    const link = `https://ovoyage.com/invitation?travelId=${travel.id}&token=${invitationToken}`;
+    return link;
+  }
 }
+

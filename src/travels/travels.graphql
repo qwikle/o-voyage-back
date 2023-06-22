@@ -24,6 +24,8 @@ type Travel {
   travelers: [Traveler!]!
   "activities of the travel"
   activities: [Activity!]!
+  "link to join the travel"
+  invitationLink: String!
 }
 
 type Traveler {
