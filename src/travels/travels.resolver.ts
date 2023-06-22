@@ -88,6 +88,8 @@ export class TravelsResolver {
       return travel;
   }
 
+
+  // Warning : handle the exception if the organizer deletes itself
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Travel')
   @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
