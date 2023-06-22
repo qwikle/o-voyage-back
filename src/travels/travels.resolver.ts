@@ -97,10 +97,11 @@ export class TravelsResolver {
   async removeTravelerFromTravel(@Args('travelerId') travelerId: number, @Context('removeTravelerFromTravel') travel: Travel, @Context() {req}: OContext){
     const {auth} = req;
     if(auth.id !== travel.organizerId){
-      if(travelerId !== auth.id){
+      if(travelerId !== auth.id || travelerId === travel.organizerId){
         throw new PermissionDeniedError();
       }
     }
+
     return this.travelsService.removeTravelerFromTravel(travelerId, travel.id)
   }
 
