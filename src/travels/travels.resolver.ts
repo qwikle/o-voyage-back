@@ -89,6 +89,23 @@ export class TravelsResolver {
   }
 
 
+  // Warning : handle the exception if the organizer deletes itself
+  @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
+  @Entity('Travel')
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
+  @Mutation('removeTravelerFromTravel')
+  async removeTravelerFromTravel(@Args('travelerId') travelerId: number, @Context('removeTravelerFromTravel') travel: Travel, @Context() {req}: OContext){
+    const {auth} = req;
+    if(auth.id !== travel.organizerId){
+      if(travelerId !== auth.id || travelerId === travel.organizerId){
+        throw new PermissionDeniedError();
+      }
+    }
+
+    return this.travelsService.removeTravelerFromTravel(travelerId, travel.id)
+  }
+
+
   @ResolveField('travelers')
   async getTravelers(
     @Parent() travel: Travel,
