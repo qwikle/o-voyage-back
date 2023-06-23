@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import configuration from 'src/commons/configuration';
 import { UpdateAccountInput } from './dto/update-account-input';
+import { ConfirmationFieldError } from 'src/commons/exceptions/confirmation.field';
 
 @Injectable()
 export class AuthService {
@@ -61,8 +62,16 @@ export class AuthService {
     });
   }
 
-  updateAccount(user:User, updateAccountInput:UpdateAccountInput){
-    user = this.userRepository.merge(user, {...updateAccountInput})
-    return this.userRepository.save(user)
+  updateAccount(user: User, updateAccountInput: UpdateAccountInput) {
+    user = this.userRepository.merge(user, { ...updateAccountInput });
+    return this.userRepository.save(user);
+  }
+
+  checkPassword(password?: string, confirmPassword?: string) {
+    if (password) {
+      if (password !== confirmPassword) {
+        throw new ConfirmationFieldError('confirmPassword');
+      }
+    }
   }
 }
