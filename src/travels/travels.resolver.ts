@@ -78,6 +78,39 @@ export class TravelsResolver {
     return this.travelsService.remove(travel.id);
   }
 
+  @UseGuards(AuthGuard, ExistsGuard)
+  @Entity('Travel')
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
+  @Mutation('addTravelerToTravel')
+  async addTravelerToTravel(
+    @Context('addTravelerToTravel') travel: Travel,
+    @Context() { req }: OContext,
+  ) {
+    const { auth } = req;
+    await this.travelsService.addTravelersToTravel(auth.id, travel.id);
+    return travel;
+  }
+
+  // Warning : handle the exception if the organizer deletes itself
+  @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
+  @Entity('Travel')
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
+  @Mutation('removeTravelerFromTravel')
+  async removeTravelerFromTravel(
+    @Args('travelerId') travelerId: number,
+    @Context('removeTravelerFromTravel') travel: Travel,
+    @Context() { req }: OContext,
+  ) {
+    const { auth } = req;
+    if (auth.id !== travel.organizerId) {
+      if (travelerId !== auth.id || travelerId === travel.organizerId) {
+        throw new PermissionDeniedError();
+      }
+    }
+
+    return this.travelsService.removeTravelerFromTravel(travelerId, travel.id);
+  }
+
   @ResolveField('travelers')
   async getTravelers(
     @Parent() travel: Travel,
@@ -100,5 +133,17 @@ export class TravelsResolver {
     @Context('dataloader') dataloader: DataLoaderInterface,
   ) {
     return dataloader.getByUser().one.load(travel.organizerId);
+  }
+
+  @UseGuards(AuthGuard)
+  @ResolveField('invitationLink')
+  getInvitationLink(
+    @Parent() travel: Travel,
+    @Context('req') { auth },
+  ): Promise<string> {
+    if (auth.id !== travel.organizerId) {
+      return null;
+    }
+    return this.travelsService.generateInvitationLink(travel);
   }
 }

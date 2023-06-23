@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateActivityInput } from './dto/create-activity.input';
 import { UpdateActivityInput } from './dto/update-activity.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Activity } from './entities/activity.entity';
 
 @Injectable()
@@ -10,6 +10,7 @@ export class ActivitiesService {
   constructor(
     @InjectRepository(Activity)
     private activityRepository: Repository<Activity>,
+    private datasource: DataSource,
   ) {}
 
   create(createActivityInput: CreateActivityInput) {
@@ -31,5 +32,15 @@ export class ActivitiesService {
 
   findByDate(date: Date, travelId: number) {
     return this.activityRepository.find({ where: { date, travelId } });
+  }
+
+  async getTraveler(id: number, travelId: number) {
+    const result = await this.datasource.query(
+      `
+      SELECT * FROM get_one_traveler($1, $2)
+      `,
+      [id, travelId],
+    );
+    return result[0];
   }
 }

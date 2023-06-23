@@ -20,6 +20,7 @@ import { Activity } from './entities/activity.entity';
 import { Property } from 'src/commons/guards/Property.decorator';
 import { PermissionProperty, TypeProperty } from 'src/commons/types/guard';
 import { DataLoaderInterface } from 'src/commons/types/dataloader';
+import { PermissionDeniedError } from 'src/commons/exceptions/denied';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
@@ -30,10 +31,15 @@ export class ActivitiesResolver {
 
   @UseGuards(AuthGuard)
   @Mutation('createActivity')
-  create(
+  async create(
     @Args('createActivityInput') createActivityInput: CreateActivityInput,
+    @Context('req') { auth },
   ) {
-    // TODO check if user is organizer of the travel
+    const traveler = await this.activitiesService.getTraveler(
+      auth.id,
+      createActivityInput.travelId,
+    );
+    if (!traveler) throw new PermissionDeniedError();
     return this.activitiesService.create(createActivityInput);
   }
 

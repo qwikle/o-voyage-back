@@ -8,9 +8,9 @@ import { OContext } from 'src/commons/types/context';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
 import { UniqueError } from 'src/commons/exceptions/unique';
-import { ConfirmationFieldError } from 'src/commons/exceptions/confirmation.field';
 import { InvalidCredentialsError } from 'src/commons/exceptions/invalid.crendatials';
 import { NotFoundError } from 'src/commons/exceptions/notFound';
+import { UpdateAccountInput } from './dto/update-account-input';
 
 // TODO set roles in new folder
 @Resolver('Auth')
@@ -29,9 +29,10 @@ export class AuthResolver {
     if (user) {
       throw new UniqueError('email');
     }
-    if (createAuthInput.password !== createAuthInput.confirmPassword) {
-      throw new ConfirmationFieldError('confirmPassword');
-    }
+    this.authService.checkPassword(
+      createAuthInput.password,
+      createAuthInput.confirmPassword,
+    );
     const createdUser = await this.authService.createUser(createAuthInput);
     const token = await this.authService.generateToken(createdUser, ctx.req.ip);
     return { user: createdUser, token };
@@ -55,6 +56,23 @@ export class AuthResolver {
       }
     }
     throw new InvalidCredentialsError();
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation('updateAccount')
+  async updateUserAccount(
+    @Args('updateAccountInput') updateAccountInput: UpdateAccountInput,
+    @Context('req') { auth },
+  ) {
+    const user = await this.authService.findById(auth.id);
+    if (!user) {
+      throw new NotFoundError();
+    }
+    this.authService.checkPassword(
+      updateAccountInput.password,
+      updateAccountInput.confirmPassword,
+    );
+    return this.authService.updateAccount(user, updateAccountInput);
   }
 
   @UseGuards(AuthGuard)
