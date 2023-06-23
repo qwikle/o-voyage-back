@@ -12,3 +12,4 @@ indexation 2023-06-16T16:33:17Z qwikle <qwikle.ziko@gmail.com> # add index to sp
 categories 2023-06-16T22:34:06Z BuysschaertQuentin <quentin.buysschaert@gmail.com> # addcategories
 rename_attendees_to_travelers 2023-06-20T12:18:44Z qwikle <qwikle.ziko@gmail.com> # change numberOfAttendees to ..OfTravelers
 unique_constraint_has_travelers 2023-06-21T14:04:38Z BuysschaertQuentin <quentin.buysschaert@gmail.com> # make a set of row unique
+remove_traveler_trigger 2023-06-22T16:00:07Z qwikle <qwikle.ziko@gmail.com> # add function trigger to protect removing travel
