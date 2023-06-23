@@ -110,6 +110,7 @@ export class TravelsResolver {
 
     return this.travelsService.removeTravelerFromTravel(travelerId, travel.id);
   }
+
   @ResolveField('travelers')
   async getTravelers(
     @Parent() travel: Travel,
