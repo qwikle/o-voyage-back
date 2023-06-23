@@ -4,6 +4,8 @@ type Travel {
   id: Int!
   "The title of the travel"
   title: String!
+
+  slug: String!
   "The from of the travel"
   from: String!
   "The to of the travel"
