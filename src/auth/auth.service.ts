@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import configuration from 'src/commons/configuration';
+import { UpdateAccountInput } from './dto/update-account-input';
 
 @Injectable()
 export class AuthService {
@@ -58,5 +59,10 @@ export class AuthService {
     return this.jwtService.verifyAsync(token, {
       secret: configuration().jwtRefreshSecret,
     });
+  }
+
+  updateAccount(user:User, updateAccountInput:UpdateAccountInput){
+    user = this.userRepository.merge(user, {...updateAccountInput})
+    return this.userRepository.save(user)
   }
 }

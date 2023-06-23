@@ -11,6 +11,7 @@ import { UniqueError } from 'src/commons/exceptions/unique';
 import { ConfirmationFieldError } from 'src/commons/exceptions/confirmation.field';
 import { InvalidCredentialsError } from 'src/commons/exceptions/invalid.crendatials';
 import { NotFoundError } from 'src/commons/exceptions/notFound';
+import { UpdateAccountInput } from './dto/update-account-input';
 
 // TODO set roles in new folder
 @Resolver('Auth')
@@ -56,6 +57,19 @@ export class AuthResolver {
     }
     throw new InvalidCredentialsError();
   }
+
+  @UseGuards(AuthGuard)
+  @Mutation('updateAccount')
+  async updateUserAccount(
+    @Args('updateAccountInput') updateAccountInput: UpdateAccountInput,
+    @Context('req') {auth} 
+    ){
+    const user = await this.authService.findById(auth.id)
+    if (!user) {
+      throw new NotFoundError();
+    }
+    return this.authService.updateAccount(user, updateAccountInput);
+    }
 
   @UseGuards(AuthGuard)
   @Mutation('deleteAccount')
