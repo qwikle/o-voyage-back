@@ -1,4 +1,4 @@
-import { Activity } from 'src/graphql';
+import { Activity } from '../../activities/entities/activity.entity';
 import { Column, PrimaryGeneratedColumn, OneToMany, Entity } from 'typeorm';
 
 @Entity('category')
