@@ -4,6 +4,8 @@ type Travel {
   id: Int!
   "The title of the travel"
   title: String!
+
+  slug: String!
   "The from of the travel"
   from: String!
   "The to of the travel"
@@ -59,6 +61,7 @@ input UpdateTravelInput {
 type Query {
   travels: [Travel]!
   travel(id: Int!): Travel
+  travelBySlug(slug: String!): Travel
 }
 
 type Mutation {

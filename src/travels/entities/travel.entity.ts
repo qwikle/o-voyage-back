@@ -10,6 +10,9 @@ export class Travel {
   title: string;
 
   @Column()
+  slug: string;
+
+  @Column()
   from: string;
 
   @Column()

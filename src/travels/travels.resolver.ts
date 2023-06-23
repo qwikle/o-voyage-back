@@ -146,4 +146,15 @@ export class TravelsResolver {
     }
     return this.travelsService.generateInvitationLink(travel);
   }
+
+  @UseGuards(AuthGuard)
+  @Query('travelBySlug')
+  async getTravelBySlug(@Args('slug') slug: string, @Context('req') { auth }) {
+    const travel = await this.travelsService.getTravelBySlug(slug);
+    const isTraveler = await this.travelsService.isTraveler(auth.id, travel.id);
+    if (!isTraveler) {
+      throw new PermissionDeniedError();
+    }
+    return travel;
+  }
 }
