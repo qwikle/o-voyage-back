@@ -6,12 +6,14 @@ import { Travel } from './entities/travel.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Hash } from 'src/commons/bcrypt';
 import * as ms from 'ms';
+import { ActivitiesService } from 'src/activities/activities.service';
 
 @Injectable()
 export class TravelsService {
   constructor(
     @InjectRepository(Travel)
     private travelRepository: Repository<Travel>,
+    private activityService: ActivitiesService,
     private datasource: DataSource,
     private hash: Hash,
   ) {}
@@ -67,5 +69,14 @@ export class TravelsService {
       [travelerId, travelId],
     );
     return true;
+  }
+
+  async isTraveler(traveler: number, travel: number) {
+    const user = await this.activityService.getTraveler(traveler, travel);
+    return !!user;
+  }
+
+  async getTravelBySlug(slug: string) {
+    return this.travelRepository.findOneBy({ slug });
   }
 }
