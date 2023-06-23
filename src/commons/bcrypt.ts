@@ -12,7 +12,6 @@ import {
 export class Hash implements HashContract {
   private salts: number;
   private iv: Buffer;
-  private cipher: Cipher;
   private key: string;
   static hash: HashContract;
 
@@ -27,7 +26,6 @@ export class Hash implements HashContract {
       .update(String(process.env.KEY))
       .digest('base64')
       .substring(0, 32);
-    this.cipher = createCipheriv('aes-256-ctr', this.key, this.iv);
   }
 
   async hashPassword(password: string): Promise<string> {
@@ -39,8 +37,9 @@ export class Hash implements HashContract {
   }
 
   async encrypt(text: string): Promise<string> {
-    const encrypted = this.cipher.update(text, 'utf8', 'hex');
-    return encrypted + this.cipher.final('hex');
+    const cipher = createCipheriv('aes-256-ctr', this.key, this.iv);
+    const encrypted = cipher.update(text, 'utf8', 'hex');
+    return encrypted + cipher.final('hex');
   }
 
   async decrypt(text: string): Promise<string> {

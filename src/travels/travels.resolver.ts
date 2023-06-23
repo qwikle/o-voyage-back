@@ -80,13 +80,17 @@ export class TravelsResolver {
 
   @UseGuards(AuthGuard, ExistsGuard)
   @Entity('Travel')
-  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Mutation('addTravelerToTravel')
   async addTravelerToTravel(
+    @Args('token') token : string,
     @Context('addTravelerToTravel') travel: Travel,
     @Context() { req }: OContext,
   ) {
     const { auth } = req;
+    const checked = await this.travelsService.checkInvitationToken(travel.id, token)
+    if (!checked){
+      throw new PermissionDeniedError();
+    }
     await this.travelsService.addTravelersToTravel(auth.id, travel.id);
     return travel;
   }
