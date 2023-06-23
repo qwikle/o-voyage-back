@@ -31,6 +31,20 @@ input SignUpInput {
   lastname: String!
 }
 
+
+input updateAccountInput {
+  "The user email"
+  email: Email
+  "The user password"
+  password: Password
+  "The user password confirmation"
+  confirmPassword: String
+  "The user first name"
+  firstname: String
+  "The user last name"
+  lastname: String
+}
+
 " Mutation to sign in a user"
 input SignInInput {
   "The user email"
@@ -47,6 +61,7 @@ type Query {
 type Mutation {
   signUp(signUpInput: SignUpInput!): Auth!
   signIn(signInInput: SignInInput!): Auth!
+  updateAccount(updateAccountInput: UpdateUserInput!): User!
   deleteAccount: Boolean!
   refreshToken(refreshToken: String!): Token!
 }
