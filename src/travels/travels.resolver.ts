@@ -82,12 +82,14 @@ export class TravelsResolver {
   @Entity('Travel')
   @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Mutation('addTravelerToTravel')
-  async addTravelerToTravel(@Context('addTravelerToTravel') travel: Travel, @Context() {req}: OContext){
-    const {auth} = req;
-    await this.travelsService.addTravelersToTravel(auth.id, travel.id)
-      return travel;
+  async addTravelerToTravel(
+    @Context('addTravelerToTravel') travel: Travel,
+    @Context() { req }: OContext,
+  ) {
+    const { auth } = req;
+    await this.travelsService.addTravelersToTravel(auth.id, travel.id);
+    return travel;
   }
-
 
   @ResolveField('travelers')
   async getTravelers(
