@@ -1,6 +1,6 @@
 import { Scalar, CustomScalar } from '@nestjs/graphql';
-import { GraphQLError, Kind, ValueNode } from 'graphql';
-
+import { Kind, ValueNode } from 'graphql';
+import { ScalarError } from '../exceptions/scalar-exception';
 @Scalar('Email', () => String)
 export class EmailScalar implements CustomScalar<string, string> {
   description = 'Email must be valid email address';
@@ -16,7 +16,7 @@ export class EmailScalar implements CustomScalar<string, string> {
 
   parseValue(value: string): string {
     if (!this.validateEmail(value)) {
-      throw new GraphQLError('');
+      throw new ScalarError(this.description, this.field);
     }
     return value.toLowerCase();
   }
@@ -27,9 +27,7 @@ export class EmailScalar implements CustomScalar<string, string> {
 
   parseLiteral(ast: ValueNode): string {
     if (ast.kind !== Kind.STRING) {
-      throw new GraphQLError(this.description, {
-        extensions: { argumenName: this.field },
-      });
+      throw new ScalarError(this.description, this.field);
     }
     return ast.value.toLowerCase();
   }
