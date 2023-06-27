@@ -1,10 +1,11 @@
 import { Scalar, CustomScalar } from '@nestjs/graphql';
-import { GraphQLError, Kind, ValueNode } from 'graphql';
+import { Kind, ValueNode } from 'graphql';
+import { ScalarError } from '../exceptions/scalar-exception';
 
 @Scalar('Date', () => Date)
 export class DateScalar implements CustomScalar<string, Date> {
   description =
-    'Date scalar type must be valid date string can be parsed by new Date() and accept timestamps with timezone eg: 2020-01-01T00:00:00+00:00';
+    'Date scalar type must be valid date string, example : "2023-01-01"';
 
   private field = 'date';
 
@@ -15,7 +16,7 @@ export class DateScalar implements CustomScalar<string, Date> {
 
   parseValue(value: string): Date {
     if (!this.validateDate(value)) {
-      throw new GraphQLError('');
+      throw new ScalarError(this.description, this.field);
     }
     return new Date(value);
   }
@@ -26,14 +27,10 @@ export class DateScalar implements CustomScalar<string, Date> {
 
   parseLiteral(ast: ValueNode): Date {
     if (ast.kind !== Kind.STRING) {
-      throw new GraphQLError(this.description, {
-        extensions: { argumenName: this.field },
-      });
+      throw new ScalarError(this.description, this.field);
     }
     if (!this.validateDate(ast.value)) {
-      throw new GraphQLError(this.description, {
-        extensions: { argumenName: this.field },
-      });
+      throw new ScalarError(this.description, this.field);
     }
     return new Date(ast.value);
   }
