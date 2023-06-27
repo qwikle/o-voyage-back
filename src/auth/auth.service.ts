@@ -20,10 +20,6 @@ export class AuthService {
     return this.userRepository.save(user);
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-
   async generateToken(user: User, ip: string) {
     const accessToken = await this.jwtService.signAsync({
       id: user.id,
