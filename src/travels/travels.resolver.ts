@@ -82,13 +82,16 @@ export class TravelsResolver {
   @Entity('Travel')
   @Mutation('addTravelerToTravel')
   async addTravelerToTravel(
-    @Args('token') token : string,
+    @Args('token') token: string,
     @Context('addTravelerToTravel') travel: Travel,
     @Context() { req }: OContext,
   ) {
     const { auth } = req;
-    const checked = await this.travelsService.checkInvitationToken(travel.id, token)
-    if (!checked){
+    const checked = await this.travelsService.checkInvitationToken(
+      travel.id,
+      token,
+    );
+    if (!checked) {
       throw new PermissionDeniedError();
     }
     await this.travelsService.addTravelersToTravel(auth.id, travel.id);
