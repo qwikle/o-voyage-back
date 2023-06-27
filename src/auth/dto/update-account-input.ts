@@ -1,19 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { PartialType } from '@nestjs/mapped-types';
+import { SignInInput } from './sign-in.input';
 
 @InputType()
-export class UpdateAccountInput {
-  @Field()
-  email: string;
-
-  @Field()
-  password: string;
-
-  @Field()
-  confirmPassword: string;
-
-  @Field()
-  firstname: string;
-
-  @Field()
-  lastname: string;
+export class UpdateAccountInput extends PartialType(SignInInput) {
 }

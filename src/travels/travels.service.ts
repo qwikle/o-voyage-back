@@ -7,6 +7,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Hash } from 'src/commons/bcrypt';
 import * as ms from 'ms';
 import { ActivitiesService } from 'src/activities/activities.service';
+import { ExpirationTokenError } from 'src/commons/exceptions/expiration-token';
 
 @Injectable()
 export class TravelsService {
@@ -54,12 +55,23 @@ export class TravelsService {
   }
 
   async generateInvitationLink(travel: Travel) {
-    const invitationToken = await this.hash.encrypt(
-      JSON.stringify({ id: travel.id, exp: ms('8h') }),
-    );
+    const exp = Date.now() + ms('8h');
+    const token = JSON.stringify({ id: travel.id, exp }, null, 2);
+    const invitationToken = await this.hash.encrypt(token);
+
     const link = `invitation?travelId=${travel.id}&token=${invitationToken}`;
     return link;
   }
+
+  async checkInvitationToken(id: number, token: string) {
+    const invitationToken = await this.hash.decrypt(token);
+    const { id: travelId, exp } = JSON.parse(invitationToken);
+    if (Date.now() > exp) {
+      throw new ExpirationTokenError();
+    }
+    return id === travelId;
+  }
+
   async removeTravelerFromTravel(travelerId: number, travelId: number) {
     await this.datasource.query(
       `

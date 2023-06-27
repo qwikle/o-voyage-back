@@ -45,15 +45,15 @@ export class TravelsResolver {
     }
     return this.travelsService.create(createTravelInput);
   }
-  //@UseGuards(AuthGuard, AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   @Query('travels')
   findAll() {
     return this.travelsService.findAll();
   }
 
-  /*   @UseGuards(AuthGuard, AllowedGuard)
+  @UseGuards(AuthGuard, AllowedGuard)
   @Entity('Travel')
-  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL) */
+  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Query('travel')
   findOne(@Args('id') id: number) {
     return this.travelsService.findOne(id);
@@ -80,18 +80,21 @@ export class TravelsResolver {
 
   @UseGuards(AuthGuard, ExistsGuard)
   @Entity('Travel')
-  @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)
   @Mutation('addTravelerToTravel')
   async addTravelerToTravel(
+    @Args('token') token : string,
     @Context('addTravelerToTravel') travel: Travel,
     @Context() { req }: OContext,
   ) {
     const { auth } = req;
+    const checked = await this.travelsService.checkInvitationToken(travel.id, token)
+    if (!checked){
+      throw new PermissionDeniedError();
+    }
     await this.travelsService.addTravelersToTravel(auth.id, travel.id);
     return travel;
   }
 
-  // Warning : handle the exception if the organizer deletes itself
   @UseGuards(AuthGuard, ExistsGuard, AllowedGuard)
   @Entity('Travel')
   @Property(PermissionProperty.TRAVELER, TypeProperty.TRAVEL)

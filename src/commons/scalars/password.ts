@@ -1,5 +1,5 @@
 import { Scalar, CustomScalar } from '@nestjs/graphql';
-import { GraphQLError } from 'graphql';
+import { ScalarError } from '../exceptions/scalar-exception';
 
 @Scalar('Password', () => String)
 export class PasswordScalar implements CustomScalar<string, string> {
@@ -14,7 +14,7 @@ export class PasswordScalar implements CustomScalar<string, string> {
 
   parseValue(value: string): string {
     if (!this.validate(value)) {
-      throw new GraphQLError(this.description);
+      throw new ScalarError(this.description, this.field);
     }
 
     return value;
@@ -26,9 +26,7 @@ export class PasswordScalar implements CustomScalar<string, string> {
 
   parseLiteral(ast: any): string {
     if (!this.validate(ast.value)) {
-      throw new GraphQLError(this.description, {
-        extensions: { argumenName: this.field },
-      });
+      throw new ScalarError(this.description, this.field);
     }
 
     return ast.value;
