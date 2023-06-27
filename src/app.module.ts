@@ -15,6 +15,9 @@ import { TravelsModule } from './travels/travels.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { DataloaderModule } from './commons/dataloader/dataloader.module';
 import { CategoriesModule } from './categories/categories.module';
+import { types } from 'pg';
+
+types.setTypeParser(1082, (value) => value); // ask pg to parse date as string
 
 @Module({
   imports: [
@@ -29,7 +32,7 @@ import { CategoriesModule } from './categories/categories.module';
       useFactory: async () => ({
         fieldResolverEnhancers: ['guards'],
         introspection: true,
-        path: '/',
+        path: '/graphql',
         playground: false,
         status400ForVariableCoercionErrors: true,
         typePaths: ['./**/*.graphql'],
