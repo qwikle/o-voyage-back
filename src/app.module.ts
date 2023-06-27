@@ -15,6 +15,9 @@ import { TravelsModule } from './travels/travels.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { DataloaderModule } from './commons/dataloader/dataloader.module';
 import { CategoriesModule } from './categories/categories.module';
+import { types } from 'pg';
+
+types.setTypeParser(1082, (value) => value);
 
 @Module({
   imports: [
