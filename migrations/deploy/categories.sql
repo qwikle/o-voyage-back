@@ -17,7 +17,7 @@ VALUES
     ('Hébergement');
 
 ALTER TABLE "activity"
-ADD COLUMN "category_id" INTEGER NOT NULL REFERENCES "category" ("id") DEFAULT 2;
+ADD COLUMN "category_id" INTEGER NOT NULL REFERENCES "category" ("id") DEFAULT 2 ON DELETE CASCADE;
 
 
 COMMIT;
