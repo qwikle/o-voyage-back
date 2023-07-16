@@ -21,7 +21,8 @@ export class TravelsService {
 
   async create(createTravelInput: CreateTravelInput) {
     const travel = this.travelRepository.create(createTravelInput);
-    return this.travelRepository.save(travel);
+    const created = await this.travelRepository.save(travel);
+    return this.travelRepository.findOneBy({ id: created.id });
   }
 
   findAll() {
