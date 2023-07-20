@@ -1,0 +1,73 @@
+scalar Date
+type Travel {
+  "The id of the travel"
+  id: Int!
+  "The title of the travel"
+  title: String!
+
+  slug: String!
+  "The from of the travel"
+  from: String!
+  "The to of the travel"
+  to: String!
+  "The departureDate of the travel"
+  departureDate: Date! # Date!
+  "The arrivalDate of the travel"
+  arrivalDate: Date! # Date!
+  "The budget of the travel"
+  budget: Int!
+  "The numberOfTravelers of the travel"
+  numberOfTravelers: Int!
+  "relation user - travel"
+  organizerId: Int!
+  "organizer of the travel"
+  organizer: Traveler!
+  "travelers of the travel"
+  travelers: [Traveler!]!
+  "activities of the travel"
+  activities: [Activity!]!
+  "link to join the travel"
+  invitationLink: String
+}
+
+type Traveler {
+  id: Int!
+  firstname: String!
+  lastname: String!
+  email: String!
+}
+
+input CreateTravelInput {
+  title: String!
+  from: String!
+  to: String!
+  departureDate: Date!
+  arrivalDate: Date!
+  budget: Int!
+  numberOfTravelers: Int!
+  organizerId: Int!
+}
+
+input UpdateTravelInput {
+  title: String
+  from: String
+  to: String
+  departureDate: Date
+  arrivalDate: Date
+  budget: Int
+  numberOfTravelers: Int
+}
+
+type Query {
+  travels: [Travel]!
+  travel(id: Int!): Travel
+  travelBySlug(slug: String!): Travel
+}
+
+type Mutation {
+  createTravel(createTravelInput: CreateTravelInput!): Travel!
+  addTravelerToTravel(id: Int!, token: String!): Travel!
+  removeTravelerFromTravel(id: Int!, travelerId: Int!): Boolean!
+  updateTravel(id: Int!, updateTravelInput: UpdateTravelInput!): Travel!
+  removeTravel(id: Int!): Boolean!
+}

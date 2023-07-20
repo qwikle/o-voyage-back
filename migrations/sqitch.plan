@@ -1,0 +1,17 @@
+%syntax-version=1.0.0
+%project=api
+
+users 2023-06-05T16:35:17Z qwikle <qwikle.ziko@gmail.com> # create user table
+travels 2023-06-08T20:39:12Z BuysschaertQuentin <quentin.buysschaert@gmail.com> # add travel
+lowercase_email 2023-06-12T08:13:23Z qwikle <qwikle.ziko@gmail.com> # change the email in db in lowercase
+has_attendees 2023-06-13T13:27:08Z qwikle <qwikle.ziko@gmail.com> # has_attendees relation
+rename_has_attendees 2023-06-14T12:14:51Z qwikle <qwikle.ziko@gmail.com> # rename relation to has_travelers
+activities 2023-06-14T13:25:21Z BuysschaertQuentin <quentin.buysschaert@gmail.com> # add activities
+trigger_function 2023-06-15T17:13:39Z qwikle <qwikle.ziko@gmail.com> # add trigger function
+indexation 2023-06-16T16:33:17Z qwikle <qwikle.ziko@gmail.com> # add index to spécifique column to improve research
+categories 2023-06-16T22:34:06Z BuysschaertQuentin <quentin.buysschaert@gmail.com> # addcategories
+rename_attendees_to_travelers 2023-06-20T12:18:44Z qwikle <qwikle.ziko@gmail.com> # change numberOfAttendees to ..OfTravelers
+unique_constraint_has_travelers 2023-06-21T14:04:38Z BuysschaertQuentin <quentin.buysschaert@gmail.com> # make a set of row unique
+remove_traveler_trigger 2023-06-22T16:00:07Z qwikle <qwikle.ziko@gmail.com> # add function trigger to protect removing travel
+slug_to_travel 2023-06-23T12:25:19Z qwikle <qwikle.ziko@gmail.com> # add slug column to travel and trigger function
+add_index 2023-06-26T09:33:46Z BuysschaertQuentin <quentin.buysschaert@gmail.com> # add index in all DB

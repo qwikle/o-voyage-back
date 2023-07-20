@@ -1,0 +1,59 @@
+scalar Email
+scalar Password
+
+"A User object containing all the information about a user"
+type User {
+  "The id of the user"
+  id: Int!
+  "The email of the user"
+  email: Email!
+  "The firstname of the user"
+  firstname: String!
+  "The lastname of the user"
+  lastname: String!
+  "Is the user banned"
+  isBanned: Boolean!
+  "The role of the user"
+  role: Role!
+  "the travels of the user"
+  travels: [Travel!]!
+}
+
+"A Role object containing all the information about a role of a user"
+type Role {
+  "The id of the role"
+  id: Int!
+  "The name of the role"
+  name: String!
+}
+
+input CreateUserInput {
+  email: Email!
+  firstname: String!
+  lastname: String!
+  password: Password!
+  confirmPassword: String!
+}
+
+input UpdateUserInput {
+  email: Email
+  firstname: String
+  lastname: String
+  password: Password
+  confirmPassword: String
+  # isBanned: Boolean
+  # roleId: Int
+}
+
+type Query {
+  "Get all users"
+  users: [User]!
+  "Get a user by id"
+  user(id: Int!): User
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(id: Int!, updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): Boolean!
+}

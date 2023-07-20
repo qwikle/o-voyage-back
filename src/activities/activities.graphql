@@ -1,0 +1,58 @@
+scalar Time
+scalar Date
+
+type Activity {
+  "The id of the activity"
+  id: Int!
+  "The name of the activity"
+  name: String!
+  "The price of the activity"
+  price: Int!
+  "The location of the activity"
+  location: String!
+  "The members of the activity"
+  members: Int!
+  "The time of the activity"
+  time: Time!
+  "The date of the activity"
+  date: Date!
+  "The travelId of the activity"
+  travelId: Int!
+  "The categoryId of the activity"
+  categoryId: Int!
+  "the travel of the activity"
+  travel: Travel!
+  "the category of the activity"
+  category: Category!
+}
+
+input CreateActivityInput {
+  name: String!
+  price: Int!
+  location: String!
+  members: Int!
+  time: String!
+  date: Date!
+  travelId: Int!
+  categoryId: Int!
+}
+
+input UpdateActivityInput {
+  name: String
+  price: Int
+  location: String
+  members: Int
+  time: String
+  date: Date
+  categoryId: Int
+}
+
+type Query {
+  activitiesByDate(date: Date!, id: Int!): [Activity!]!
+}
+
+type Mutation {
+  createActivity(createActivityInput: CreateActivityInput!): Activity!
+  updateActivity(id: Int!, updateActivityInput: UpdateActivityInput!): Activity!
+  removeActivity(id: Int!): Boolean!
+}
