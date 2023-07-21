@@ -157,6 +157,9 @@ export class TravelsResolver {
   @Query('travelBySlug')
   async getTravelBySlug(@Args('slug') slug: string, @Context('req') { auth }) {
     const travel = await this.travelsService.getTravelBySlug(slug);
+    if (!travel) {
+      return null;
+    }
     const isTraveler = await this.travelsService.isTraveler(auth.id, travel.id);
     if (!isTraveler) {
       throw new PermissionDeniedError();
