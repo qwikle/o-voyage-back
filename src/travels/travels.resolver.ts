@@ -20,16 +20,12 @@ import { AdminGuard, Role } from 'src/commons/guards/admin.guard';
 import { AllowedGuard } from 'src/commons/guards/allowed.guard';
 import { Property } from 'src/commons/guards/Property.decorator';
 import { PermissionDeniedError } from 'src/commons/exceptions/denied';
-import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 import { PermissionProperty, TypeProperty } from 'src/commons/types/guard';
 import { DataLoaderInterface } from 'src/commons/types/dataloader';
 
 @Resolver('Travel')
 export class TravelsResolver {
-  constructor(
-    private readonly travelsService: TravelsService,
-    private readonly dataloaderService: DataloaderService,
-  ) {}
+  constructor(private readonly travelsService: TravelsService) {}
 
   @UseGuards(AuthGuard)
   @Mutation('createTravel')

@@ -1,10 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
-import { Any, DataSource } from 'typeorm';
-import { CONTEXT } from '@nestjs/graphql';
+import { Any } from 'typeorm';
 import { IDataLoader } from '../types/dataloader';
+import connection from '../database.config';
 
-@Injectable()
 export class DataloaderService {
   private roleDataLoader: IDataLoader;
   private userDataLoader: IDataLoader;
@@ -14,10 +12,8 @@ export class DataloaderService {
   private travelersDataLoader: DataLoader<number, any>;
   private travelsDataLoader: DataLoader<number, any>;
 
-  constructor(
-    private readonly dataSource: DataSource,
-    @Inject(CONTEXT) private readonly context: any,
-  ) {
+  static dataSource = connection;
+  constructor() {
     this.roleDataLoader = {
       one: this.generateDataLoader('Role', 'id'),
       many: this.generateDataLoader('Role', 'id', 'MANY'),
@@ -44,8 +40,6 @@ export class DataloaderService {
     this.travelersDataLoader = this.generateTravelerSLoader();
 
     this.travelsDataLoader = this.generateTravelsLoader();
-
-    this.context.dataloader = this;
   }
 
   private generateDataLoader = (
@@ -54,7 +48,7 @@ export class DataloaderService {
     type: 'ONE' | 'MANY' = 'ONE',
   ) => {
     return new DataLoader(async (ids: number[]) => {
-      const results = await this.dataSource.manager
+      const results = await DataloaderService.dataSource.manager
         .getRepository(entityName)
         .find({ where: { [key]: Any(ids) } });
       return ids.map((id) =>
@@ -78,7 +72,9 @@ export class DataloaderService {
   private generateTravelerSLoader = () => {
     return new DataLoader(async (ids: number[]) => {
       const query = `SELECT * FROM get_travelers($1)`;
-      const results = await this.dataSource.manager.query(query, [ids]);
+      const results = await DataloaderService.dataSource.manager.query(query, [
+        ids,
+      ]);
       const mapped = ids.map((id) =>
         results.filter((result) => result.travel_id === id),
       );
@@ -97,7 +93,9 @@ export class DataloaderService {
   private generateTravelsLoader = () => {
     return new DataLoader(async (ids: number[]) => {
       const query = `SELECT * FROM get_travels($1)`;
-      const results = await this.dataSource.manager.query(query, [ids]);
+      const results = await DataloaderService.dataSource.manager.query(query, [
+        ids,
+      ]);
       const mapped = ids.map((id) =>
         results.filter((result) => result.traveler_id === id),
       );
