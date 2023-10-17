@@ -16,17 +16,13 @@ import { Entity } from 'src/commons/guards/Entity.decorator';
 import { User } from './entities/user.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AdminGuard } from 'src/commons/guards/admin.guard';
-import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 import { DataLoaderInterface } from 'src/commons/types/dataloader';
 import { UniqueError } from 'src/commons/exceptions/unique';
 import { ConfirmationFieldError } from 'src/commons/exceptions/confirmation.field';
 
 @Resolver('User')
 export class UsersResolver {
-  constructor(
-    private readonly usersService: UsersService,
-    private dataLoaderService: DataloaderService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(AuthGuard, AdminGuard)
   @Mutation('createUser')

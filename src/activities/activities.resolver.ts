@@ -10,7 +10,6 @@ import {
 import { ActivitiesService } from './activities.service';
 import { CreateActivityInput } from './dto/create-activity.input';
 import { UpdateActivityInput } from './dto/update-activity.input';
-import { DataloaderService } from 'src/commons/dataloader/dataloader.service';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ExistsGuard } from 'src/commons/guards/exists.guard';
@@ -24,10 +23,7 @@ import { PermissionDeniedError } from 'src/commons/exceptions/denied';
 
 @Resolver('Activity')
 export class ActivitiesResolver {
-  constructor(
-    private readonly activitiesService: ActivitiesService,
-    private readonly dataloaderService: DataloaderService,
-  ) {}
+  constructor(private readonly activitiesService: ActivitiesService) {}
 
   @UseGuards(AuthGuard)
   @Mutation('createActivity')

@@ -33,6 +33,10 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+<<<<<<< HEAD
 # .env
+=======
+.env
+>>>>>>> bb7eac7865bd98e19b304be83619115e0e11fbab
 src/graphql.ts
 sqitch.conf

@@ -7,15 +7,14 @@ import { ApolloServerPluginLandingPageProductionDefault } from '@apollo/server/p
 import { join } from 'path';
 import configuration from './commons/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { TravelsModule } from './travels/travels.module';
 import { ActivitiesModule } from './activities/activities.module';
-import { DataloaderModule } from './commons/dataloader/dataloader.module';
 import { CategoriesModule } from './categories/categories.module';
 import { types } from 'pg';
+import { DataloaderService } from './commons/dataloader/dataloader.service';
 
 types.setTypeParser(1082, (value) => value); // ask pg to parse date as string
 
@@ -30,6 +29,7 @@ types.setTypeParser(1082, (value) => value); // ask pg to parse date as string
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useFactory: async () => ({
+        context: ({ req }) => ({ req, dataloader: new DataloaderService() }),
         fieldResolverEnhancers: ['guards'],
         introspection: true,
         path: '/graphql',
@@ -67,12 +67,7 @@ types.setTypeParser(1082, (value) => value); // ask pg to parse date as string
     AuthModule,
     TravelsModule,
     ActivitiesModule,
-    DataloaderModule,
     CategoriesModule,
   ],
-  controllers: [],
-  providers: [],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}

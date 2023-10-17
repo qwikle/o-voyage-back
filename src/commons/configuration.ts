@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 export default () => ({
   jwtTime: process.env.JWT_TIME || '15m',
   jwtSecret: process.env.JWT_SECRET,
